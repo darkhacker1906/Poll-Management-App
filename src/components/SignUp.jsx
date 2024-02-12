@@ -16,6 +16,7 @@ import {
   FormControl,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
   Stack,
 } from "@mui/material";
@@ -23,10 +24,11 @@ import { useFormik } from "formik";
 import SignupImg from "../assets/SignupImg.jpeg";
 import { signupSchema } from "../schemas/Validation";
 import FormError from "../schemas/formError";
+import { NavLink } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+export default function SignUp() {
   const initialValues = {
     username: "",
     password: "",
@@ -43,7 +45,7 @@ export default function SignIn() {
     });
 
   return (
-    <Stack
+    <Box
       sx={{
         backgroundImage: `url(${SignupImg})`,
         backgroundSize: "cover",
@@ -51,100 +53,132 @@ export default function SignIn() {
         objectFit: "cover",
         minHeight: "100vh",
         minWidth: "100vw",
+        overflowY: "auto",
+        overflowX: "hidden",
       }}
     >
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
+        <Container component="main">
           <CssBaseline />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              background: "#EBEBEB",
-              opacity: ".9",
-              padding: "15px",
-            }}
+          <Grid
+            item
+            xs={12}
+            sm={8}
+            md={5}
+            component={Paper}
+            elevation={6}
+            width={"45%"}
+            square
+            sx={{ margin: "auto" }}
           >
-            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign Up
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                value={values.username}
-                onBlur={handleBlur}
-                onChange={handleChange}
-              />
-              {errors.username && touched.username && (
-                <FormError error_msg={errors} />
-              )}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                value={values.password}
-                onBlur={handleBlur}
-                onChange={handleChange}
-              />
-              <TextField
-                margin="normal"
-                fullWidth
-                name="confirm_password"
-                label=" Confirm Password"
-                type="password"
-                id="confirm_password"
-                value={values.confirm_password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <FormControl fullWidth margin="normal">
-                <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  name="role"
-                  value={values.role}
-                  label="Role"
-                  onChange={handleChange}
-                >
-                  <MenuItem value={"Admin"}>Admin</MenuItem>
-                  <MenuItem value={"User"}>User</MenuItem>
-                </Select>
-              </FormControl>
+            <Box>
+              <Box display={"flex"} sx={{ justifyContent: "center" }}>
+                <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                  <LockOutlinedIcon />
+                </Avatar>
+              </Box>
 
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-              >
+              <Typography component="h1" variant="h5" textAlign={"center"}>
                 Sign Up
-              </Button>
-              <Grid container>
-                <Grid item xs></Grid>
-                <Grid item>
-                  <Link href="#" variant="body2">
-                    {" Sign Up"}
-                  </Link>
+              </Typography>
+              <Stack
+                component="form"
+                onSubmit={handleSubmit}
+                sx={{ mt: 1, p: 2 }}
+              >
+                <Box>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="username"
+                    label="Username"
+                    name="username"
+                    value={values.username}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                  {errors.username && touched.username && (
+                    <FormError error_msg={errors.username} />
+                  )}
+                </Box>
+                <Box width={"100%"}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    value={values.password}
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                  />
+                  {errors.password && touched.password && (
+                    <FormError error_msg={errors.password} />
+                  )}
+                </Box>
+                <Box width={"100%"}>
+                  <TextField
+                    margin="normal"
+                    fullWidth
+                    name="confirm_password"
+                    label=" Confirm Password"
+                    type="password"
+                    id="confirm_password"
+                    value={values.confirm_password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                  {errors.confirm_password && touched.confirm_password && (
+                    <FormError error_msg={errors.confirm_password} />
+                  )}
+                </Box>
+                <Box width={"100%"}>
+                  <FormControl fullWidth margin="normal">
+                    <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      name="role"
+                      value={values.role}
+                      label="Role"
+                      onChange={handleChange}
+                    >
+                      <MenuItem value={"Admin"}>Admin</MenuItem>
+                      <MenuItem value={"User"}>User</MenuItem>
+                    </Select>
+                    {errors.confirm_password && touched.confirm_password && (
+                      <FormError error_msg={errors.role} />
+                    )}
+                  </FormControl>
+                </Box>
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Sign Up
+                </Button>
+                <Grid container>
+                  <Grid item xs></Grid>
+                  <Grid item>
+                    <NavLink to="/">
+                      <Typography sx={{ textDecoration: "none" }}>
+                        {" "}
+                        Login
+                      </Typography>
+                    </NavLink>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Stack>
             </Box>
-          </Box>
+          </Grid>
         </Container>
       </ThemeProvider>
-    </Stack>
+    </Box>
   );
 }

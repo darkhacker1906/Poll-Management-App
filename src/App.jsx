@@ -1,10 +1,15 @@
 import React from 'react'
-import SignUp from './components/SignUp'
+import SignIn from './components/SignIn'
+import { BrowserRouter } from 'react-router-dom'
+import Router from './router/Router'
+
 
 function App() {
   return (
     <div>
-      <SignUp/>
+      <BrowserRouter>
+      <Router/>
+      </BrowserRouter>
     </div>
   )
 }
