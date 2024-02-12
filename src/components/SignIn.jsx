@@ -33,9 +33,19 @@ export default function SignIn() {
     });
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Grid container component="main" sx={{ height: "100vh" }}>
+      <Grid
+        container
+        component="main"
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          overflowY: "hidden",
+        }}
+      >
         <CssBaseline />
         <Stack
+          p={{ lg: 3, xs: 0 }}
           sx={{
             backgroundImage: `url(${Signin})`,
             backgroundSize: "cover",
@@ -47,20 +57,21 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Grid
+          <Stack
             item
             xs={12}
             sm={8}
             md={5}
             component={Paper}
             elevation={6}
-            width={"45%"}
+            width={{ lg: "45%", sm: "50%", md: "70%", xs: "100%" }}
+            height={{ sm: "70%", md: "80%", xs: "100%" }}
             square
+            borderRadius={{ lg: 5, xs: 0 }}
           >
             <Stack
               sx={{
-                my: 8,
-                mx: 4,
+                p: 4,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -122,7 +133,7 @@ export default function SignIn() {
                 </Grid>
               </Grid>
             </Stack>
-          </Grid>
+          </Stack>
         </Stack>
       </Grid>
     </ThemeProvider>

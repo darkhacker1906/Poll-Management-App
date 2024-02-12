@@ -3,9 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -25,24 +22,46 @@ import SignupImg from "../assets/SignupImg.jpeg";
 import { signupSchema } from "../schemas/Validation";
 import FormError from "../schemas/formError";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { dispatch } from "../redux/store/store";
+import {
+  signUpapi,
+  signupResetReducer,
+  startLoading,
+} from "../redux/slice/SignUpSlice";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
+  const signupSlice = useSelector((state) => state.SignUp);
+  // console.log(signupSlice,'gggggggggggggggggg');
   const initialValues = {
     username: "",
     password: "",
     confirm_password: "",
     role: "",
   };
-  const { values, handleSubmit, handleChange, handleBlur, errors, touched } =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: signupSchema,
-      onSubmit: (values) => {
-        console.log(values);
-      },
-    });
+  const {
+    values,
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    errors,
+    touched,
+    resetForm,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: signupSchema,
+    onSubmit: (values) => {
+      try {
+        dispatch(startLoading());
+        dispatch(signUpapi(values));
+      } catch (error) {
+        dispatch(signupResetReducer());
+      }
+      resetForm();
+    },
+  });
 
   return (
     <Box
@@ -51,23 +70,30 @@ export default function SignUp() {
         backgroundSize: "cover",
         backgroundPosition: "center",
         objectFit: "cover",
-        minHeight: "100vh",
-        minWidth: "100vw",
-        overflowY: "auto",
-        overflowX: "hidden",
+        justifyContent: "center",
+        display: "flex",
+        alignItems: "center",
       }}
     >
       <ThemeProvider theme={defaultTheme}>
-        <Container component="main">
+        <Container
+          component="main"
+          sx={{
+            width: "100vw",
+            height: "100vh",
+            justifyContent: "center",
+            display: "flex",
+          }}
+        >
           <CssBaseline />
-          <Grid
+          <Stack
             item
             xs={12}
             sm={8}
             md={5}
             component={Paper}
             elevation={6}
-            width={"45%"}
+            width={{ lg: "45%", sm: "50%", md: "60%", xs: "100%" }}
             square
             sx={{ margin: "auto" }}
           >
@@ -176,7 +202,7 @@ export default function SignUp() {
                 </Grid>
               </Stack>
             </Box>
-          </Grid>
+          </Stack>
         </Container>
       </ThemeProvider>
     </Box>
