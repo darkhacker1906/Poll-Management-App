@@ -1,4 +1,4 @@
-import * as React from "react";
+import  React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,18 +11,32 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFormik } from "formik";
 import { signinSchema } from "../schemas/Validation";
-import Signin from "../assets/SigninImg.jpeg";
+import Signin from "../assets/images/SigninImg.jpeg";
 import { Stack } from "@mui/material";
 import FormError from "../schemas/formError";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { dispatch } from "../redux/store/store";
-import { signInApi, signupResetReducer, startLoading } from "../redux/slice/SignInSlice";
+import {
+  signInApi,
+  loginResetReducer,
+  startLoading,
+} from "../redux/slice/SignInSlice";
 import { useSelector } from "react-redux";
-
+import { jwtDecode } from "jwt-decode";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const signInSlice=useSelector((state)=>state.SignIn);
+  const signinSlice = useSelector((state) => state.signin);
+  const navigate=useNavigate();
+  useEffect(()=>{
+     if (signinSlice.isSuccess && signinSlice.data.token) {
+      const decode = jwtDecode(signinSlice.data.token);
+      console.log(decode,"ggggggggggggggf");
+      localStorage.setItem("token", signinSlice.data.token);
+      localStorage.setItem("role", decode.role);
+      dispatch(loginResetReducer());
+     }
+  }, [signinSlice.isSuccess])
   const initialValues = {
     username: "",
     password: "",
@@ -32,18 +46,26 @@ export default function SignIn() {
       initialValues: initialValues,
       validationSchema: signinSchema,
       onSubmit: (values) => {
-         try{
+        try {
           dispatch(startLoading());
           dispatch(signInApi(values));
-         }
-         catch(error){
-         console.log(error,"eeeeeeeeeee");
-         dispatch(signupResetReducer());
-         }
-      
-
+        } catch (error) {
+          dispatch(loginResetReducer());
+        }
       },
     });
+
+    let token = localStorage.getItem("token");
+    let role = localStorage.getItem("role");
+    useEffect(()=>{
+      if(token){
+        if(role==="admin"){
+          navigate("/admin");
+        }else{
+          navigate("/user")
+        }
+      }
+    },[token,role,navigate])
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid
@@ -78,9 +100,10 @@ export default function SignIn() {
             component={Paper}
             elevation={6}
             width={{ lg: "45%", sm: "50%", md: "70%", xs: "100%" }}
-            height={{ sm: "70%", md: "80%", xs: "100%" }}
+            height={{ sm: "auto", md: "auto", xs: "100%" }}
             square
             borderRadius={{ lg: 5, xs: 0 }}
+            sx={{ opacity: ".8" }}
           >
             <Stack
               sx={{
@@ -142,7 +165,12 @@ export default function SignIn() {
               <Grid container>
                 <Grid item xs></Grid>
                 <Grid item>
-                  <NavLink to="/signup"> Sign up</NavLink>
+                  <Box display={"flex"} gap={1}>
+                    Don't have an account
+                    <NavLink style={{ textDecoration: "none" }} to="/signup">
+                      Sign up
+                    </NavLink>
+                  </Box>
                 </Grid>
               </Grid>
             </Stack>
