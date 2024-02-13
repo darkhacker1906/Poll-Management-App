@@ -15,10 +15,14 @@ import Signin from "../assets/SigninImg.jpeg";
 import { Stack } from "@mui/material";
 import FormError from "../schemas/formError";
 import { NavLink } from "react-router-dom";
+import { dispatch } from "../redux/store/store";
+import { signInApi, signupResetReducer, startLoading } from "../redux/slice/SignInSlice";
+import { useSelector } from "react-redux";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+  const signInSlice=useSelector((state)=>state.SignIn);
   const initialValues = {
     username: "",
     password: "",
@@ -28,7 +32,16 @@ export default function SignIn() {
       initialValues: initialValues,
       validationSchema: signinSchema,
       onSubmit: (values) => {
-        console.log(values);
+         try{
+          dispatch(startLoading());
+          dispatch(signInApi(values));
+         }
+         catch(error){
+         console.log(error,"eeeeeeeeeee");
+         dispatch(signupResetReducer());
+         }
+      
+
       },
     });
   return (

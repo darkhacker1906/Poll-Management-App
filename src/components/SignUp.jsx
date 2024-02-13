@@ -1,4 +1,4 @@
-import * as React from "react";
+import  React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,7 +24,7 @@ import FormError from "../schemas/formError";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { dispatch } from "../redux/store/store";
-import {
+import SignUpSlice, {
   signUpapi,
   signupResetReducer,
   startLoading,
@@ -33,8 +33,7 @@ import {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const signupSlice = useSelector((state) => state.SignUp);
-  // console.log(signupSlice,'gggggggggggggggggg');
+  const signupSlice = useSelector((state) => state.signUp);
   const initialValues = {
     username: "",
     password: "",
@@ -62,6 +61,16 @@ export default function SignUp() {
       resetForm();
     },
   });
+
+//  useEffect(()=>{
+//   if(SignUpSlice.data.error===1){
+//     dispatch(signupResetReducer());
+//   }
+//   else if(signupSlice.error===0){
+//     alert("Signing up")
+//     dispatch(signupResetReducer());
+//   }
+//  },[SignUpSlice.isSuccess])
 
   return (
     <Box
