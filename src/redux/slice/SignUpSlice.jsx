@@ -33,19 +33,23 @@ export const signUp = createSlice({
       state.data = {};
     },
   },
-});;
+});
 export const signUpapi = (payload) => async (dispatch) => {
   try {
     dispatch(startLoading());
     let response = await Instance.post(
-      `add_user?username=${payload.name}&password=${payload.password}&role=${payload.role}`
+      `add_user?username=${payload.username}&password=${payload.password}&role=${payload.role}`
     );
-    // if(response.error===0){
-    dispatch(loginSuccessful(response.data));
-    // }
+    if (response.data.error === 0) {
+      console.log(response);
+      dispatch(loginSuccessful(response.data));
+    } else {
+      console.log("Something is error ");
+    }
   } catch (error) {
     dispatch(hasError(error));
   }
 };
-export const {startLoading,hasError,loginSuccessful,signupResetReducer}=signUp.actions;
-export default signUp.reducer
+export const { startLoading, hasError, loginSuccessful, signupResetReducer } =
+  signUp.actions;
+export default signUp.reducer;

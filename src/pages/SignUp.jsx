@@ -34,7 +34,7 @@ const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const signupSlice = useSelector((state) => state.signup);
+  const signupSlice = useSelector((state) => state.signup.isSuccess);
   console.log(signupSlice);
 
   const initialValues = {
@@ -65,13 +65,13 @@ export default function SignUp() {
     },
   });
   useEffect(() => {
-    if (signupSlice.isSuccess) {
+    if (signupSlice) {
       dispatch(signupResetReducer());
       setTimeout(() => {
         navigate("/");
       }, 500);
     }
-  }, [signupSlice.isSuccess]);
+  }, [signupSlice]);
 
   return (
     <Box
