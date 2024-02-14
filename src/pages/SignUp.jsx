@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -29,14 +30,15 @@ import {
   signupResetReducer,
   startLoading,
 } from "../redux/slice/SignUpSlice";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
   const signupSlice = useSelector((state) => state.signup);
-  console.log(signupSlice);
-
+  const isLoading = signupSlice.loading;
   const initialValues = {
     username: "",
     password: "",
@@ -64,12 +66,17 @@ export default function SignUp() {
       resetForm();
     },
   });
+
   useEffect(() => {
-    if (signupSlice.isSuccess) {
+    if (signupSlice.data.error === 1) {
+      toast.error("User already exists!");
+      dispatch(signupResetReducer());
+    } else if (signupSlice.data.error === 0) {
       dispatch(signupResetReducer());
       setTimeout(() => {
         navigate("/");
-      }, 500);
+      }, 1000);
+      toast.success("Sign up successful!", { autoClose: 1000 });
     }
   }, [signupSlice.isSuccess]);
 
@@ -192,15 +199,19 @@ export default function SignUp() {
                     )}
                   </FormControl>
                 </Box>
+                {isLoading ? (
+                  <CircularProgress />
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                  >
+                    Sign Up
+                  </Button>
+                )}
 
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                >
-                  Sign Up
-                </Button>
                 <Grid container>
                   <Grid item xs></Grid>
                   <Grid item>
@@ -222,6 +233,7 @@ export default function SignUp() {
           </Stack>
         </Container>
       </ThemeProvider>
+      <ToastContainer />
     </Box>
   );
 }

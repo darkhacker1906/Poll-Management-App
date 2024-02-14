@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFormik } from "formik";
 import { signinSchema } from "../schemas/Validation";
 import Signin from "../assets/images/SigninImg.jpeg";
-import { Stack } from "@mui/material";
+import { CircularProgress, Stack } from "@mui/material";
 import FormError from "../schemas/formError";
 import { NavLink, useNavigate } from "react-router-dom";
 import { dispatch } from "../redux/store/store";
@@ -23,20 +23,28 @@ import {
 } from "../redux/slice/SignInSlice";
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
+import { ToastContainer, toast } from "react-toastify";
+
 const defaultTheme = createTheme();
 
 export default function SignIn() {
   const signinSlice = useSelector((state) => state.signin);
+  const isLoading=signinSlice.loading;
+  console.log(isLoading);
   const navigate=useNavigate();
   useEffect(()=>{
      if (signinSlice.isSuccess && signinSlice.data.token) {
       const decode = jwtDecode(signinSlice.data.token);
-      console.log(decode,"ggggggggggggggf");
       localStorage.setItem("token", signinSlice.data.token);
       localStorage.setItem("role", decode.role);
       dispatch(loginResetReducer());
      }
-  }, [signinSlice.isSuccess])
+     else if (signinSlice.data.error === 1) {
+      toast.error("User does not exist!", { autoClose: 1500 });
+      dispatch(loginResetReducer());
+    }
+  }, [signinSlice.isSuccess,signinSlice.data.error])
+
   const initialValues = {
     username: "",
     password: "",
@@ -59,11 +67,12 @@ export default function SignIn() {
     let role = localStorage.getItem("role");
     useEffect(()=>{
       if(token){
-        if(role==="admin"){
+        if(role.toLocaleLowerCase()==="admin"){
           navigate("/admin");
         }else{
           navigate("/user")
         }
+        
       }
     },[token,role,navigate])
   return (
@@ -152,7 +161,8 @@ export default function SignIn() {
                 {errors.password && touched.password && (
                   <FormError error_msg={errors.password} />
                 )}
-                <Button
+                {
+                  isLoading ?<CircularProgress sx={{textAlign:"center"}}/>: <Button
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -161,6 +171,7 @@ export default function SignIn() {
                 >
                   Sign In
                 </Button>
+                }
               </Box>
               <Grid container>
                 <Grid item xs></Grid>
@@ -177,6 +188,7 @@ export default function SignIn() {
           </Stack>
         </Stack>
       </Grid>
+      <ToastContainer/>
     </ThemeProvider>
   );
 }
