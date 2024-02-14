@@ -1,4 +1,4 @@
-import  React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -29,52 +29,59 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
   const signinSlice = useSelector((state) => state.signin);
-  const isLoading=signinSlice.loading;
+  const isLoading = signinSlice.loading;
   console.log(isLoading);
-  const navigate=useNavigate();
-  useEffect(()=>{
-     if (signinSlice.isSuccess && signinSlice.data.token) {
-      const decode = jwtDecode(signinSlice.data.token);
-      localStorage.setItem("token", signinSlice.data.token);
-      localStorage.setItem("role", decode.role);
-      dispatch(loginResetReducer());
-     }
-     else if (signinSlice.data.error === 1) {
-      toast.error("User does not exist!", { autoClose: 1500 });
-      dispatch(loginResetReducer());
-    }
-  }, [signinSlice.isSuccess,signinSlice.data.error])
+  const navigate = useNavigate();
 
   const initialValues = {
     username: "",
     password: "",
   };
-  const { handleBlur, handleSubmit, handleChange, values, touched, errors } =
-    useFormik({
-      initialValues: initialValues,
-      validationSchema: signinSchema,
-      onSubmit: (values) => {
-        try {
-          dispatch(startLoading());
-          dispatch(signInApi(values));
-        } catch (error) {
-          dispatch(loginResetReducer());
-        }
-      },
-    });
-
-    let token = localStorage.getItem("token");
-    let role = localStorage.getItem("role");
-    useEffect(()=>{
-      if(token){
-        if(role.toLocaleLowerCase()==="admin"){
-          navigate("/admin");
-        }else{
-          navigate("/user")
-        }
-        
+  const {
+    handleBlur,
+    handleSubmit,
+    handleChange,
+    values,
+    touched,
+    errors,
+    resetForm,
+  } = useFormik({
+    initialValues: initialValues,
+    validationSchema: signinSchema,
+    onSubmit: (values) => {
+      try {
+        dispatch(startLoading());
+        dispatch(signInApi(values));
+      } catch (error) {
+        dispatch(loginResetReducer());
       }
-    },[token,role,navigate])
+      resetForm();
+    },
+  });
+
+  useEffect(() => {
+    if (signinSlice.isSuccess && signinSlice.data.token) {
+      const decode = jwtDecode(signinSlice.data.token);
+      localStorage.setItem("token", signinSlice.data.token);
+      localStorage.setItem("role", decode.role);
+      dispatch(loginResetReducer());
+    } else if (signinSlice.data.error === 1) {
+      toast.error("User does not exist!", { autoClose: 1500 });
+      dispatch(loginResetReducer());
+    }
+  }, [signinSlice.isSuccess, signinSlice.data.error]);
+
+  let token = localStorage.getItem("token");
+  let role = localStorage.getItem("role");
+  useEffect(() => {
+    if (token) {
+      if (role.toLocaleLowerCase() === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/user");
+      }
+    }
+  }, [token, role, navigate]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid
@@ -108,7 +115,7 @@ export default function SignIn() {
             md={5}
             component={Paper}
             elevation={6}
-            width={{ lg: "45%", sm: "50%", md: "70%", xs: "100%" }}
+            width={{ lg: "40%", sm: "50%", md: "70%", xs: "100%" }}
             height={{ sm: "auto", md: "auto", xs: "100%" }}
             square
             borderRadius={{ lg: 5, xs: 0 }}
@@ -161,17 +168,19 @@ export default function SignIn() {
                 {errors.password && touched.password && (
                   <FormError error_msg={errors.password} />
                 )}
-                {
-                  isLoading ?<CircularProgress sx={{textAlign:"center"}}/>: <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
-                  onClick={() => handleSubmit()}
-                >
-                  Sign In
-                </Button>
-                }
+                {isLoading ? (
+                  <CircularProgress sx={{ textAlign: "center" }} />
+                ) : (
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2 }}
+                    onClick={() => handleSubmit()}
+                  >
+                    Sign In
+                  </Button>
+                )}
               </Box>
               <Grid container>
                 <Grid item xs></Grid>
@@ -188,7 +197,7 @@ export default function SignIn() {
           </Stack>
         </Stack>
       </Grid>
-      <ToastContainer/>
+      <ToastContainer />
     </ThemeProvider>
   );
 }
