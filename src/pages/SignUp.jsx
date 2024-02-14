@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,10 +18,10 @@ import {
   Stack,
 } from "@mui/material";
 import { useFormik } from "formik";
-import SignupImg from "../assets/SignupImg.jpeg";
+import SignupImg from "../assets/images/SignupImg.jpeg";
 import { signupSchema } from "../schemas/Validation";
 import FormError from "../schemas/formError";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { dispatch } from "../redux/store/store";
 import {
@@ -33,8 +33,10 @@ import {
 const defaultTheme = createTheme();
 
 export default function SignUp() {
-  const signupSlice = useSelector((state) => state.SignUp);
-  // console.log(signupSlice,'gggggggggggggggggg');
+  const navigate = useNavigate();
+  const signupSlice = useSelector((state) => state.signup);
+  console.log(signupSlice);
+
   const initialValues = {
     username: "",
     password: "",
@@ -62,10 +64,19 @@ export default function SignUp() {
       resetForm();
     },
   });
+  useEffect(() => {
+    if (signupSlice.isSuccess) {
+      dispatch(signupResetReducer());
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
+    }
+  }, [signupSlice.isSuccess]);
 
   return (
     <Box
       sx={{
+        justifyContent: "center",
         backgroundImage: `url(${SignupImg})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -73,16 +84,19 @@ export default function SignUp() {
         justifyContent: "center",
         display: "flex",
         alignItems: "center",
+        width: "100vw",
+        height: "100vh",
+        overflow: "auto",
       }}
     >
       <ThemeProvider theme={defaultTheme}>
         <Container
           component="main"
           sx={{
-            width: "100vw",
-            height: "100vh",
-            justifyContent: "center",
-            display: "flex",
+            padding: {
+              xs: 0,
+              md: 16,
+            },
           }}
         >
           <CssBaseline />
@@ -95,7 +109,7 @@ export default function SignUp() {
             elevation={6}
             width={{ lg: "45%", sm: "50%", md: "60%", xs: "100%" }}
             square
-            sx={{ margin: "auto" }}
+            sx={{ margin: "auto", borderRadius: "15px", opacity: ".9" }}
           >
             <Box>
               <Box display={"flex"} sx={{ justifyContent: "center" }}>
@@ -115,7 +129,6 @@ export default function SignUp() {
                 <Box>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     id="username"
                     label="Username"
@@ -131,7 +144,6 @@ export default function SignUp() {
                 <Box width={"100%"}>
                   <TextField
                     margin="normal"
-                    required
                     fullWidth
                     name="password"
                     label="Password"
@@ -175,7 +187,7 @@ export default function SignUp() {
                       <MenuItem value={"Admin"}>Admin</MenuItem>
                       <MenuItem value={"User"}>User</MenuItem>
                     </Select>
-                    {errors.confirm_password && touched.confirm_password && (
+                    {errors.role && touched.role && (
                       <FormError error_msg={errors.role} />
                     )}
                   </FormControl>
@@ -192,12 +204,17 @@ export default function SignUp() {
                 <Grid container>
                   <Grid item xs></Grid>
                   <Grid item>
-                    <NavLink to="/">
-                      <Typography sx={{ textDecoration: "none" }}>
-                        {" "}
-                        Login
-                      </Typography>
-                    </NavLink>
+                    <Box display={"flex"} gap={1}>
+                      Already have an account
+                      <NavLink
+                        style={{
+                          textDecoration: "none",
+                        }}
+                        to="/"
+                      >
+                        Sign in
+                      </NavLink>
+                    </Box>
                   </Grid>
                 </Grid>
               </Stack>
@@ -208,3 +225,4 @@ export default function SignUp() {
     </Box>
   );
 }
+// export default SignUp

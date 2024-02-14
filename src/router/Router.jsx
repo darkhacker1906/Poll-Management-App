@@ -1,7 +1,8 @@
 import React from 'react'
 import { Route, Routes } from 'react-router-dom'
-import SignIn from '../components/SignIn'
-import SignUp from '../components/SignUp'
+import SignIn from '../pages/SignIn'
+import SignUp from '../pages/SignUp'
+import AdminDashBoard from '../pages/AdminDashBoard'
 
 function Router() {
   return (
@@ -9,6 +10,8 @@ function Router() {
       <Routes>
         <Route path='/' element={<SignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
+        <Route path='/admin' element={<AdminDashBoard/>}/>
+        <Route path='/user' element={<AdminDashBoard/>}/>
       </Routes>
     </div>
   )

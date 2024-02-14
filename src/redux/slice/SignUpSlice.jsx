@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Instance from "../../axios/BaseUrl";
 const initialState = {
   loading: false,
   isError: false,
@@ -35,13 +36,15 @@ export const signUp = createSlice({
 });;
 export const signUpapi = (payload) => async (dispatch) => {
   try {
+    dispatch(startLoading());
     let response = await Instance.post(
-      `add_user?username=${payload.name}& password=${payload.password}& role=${payload.role}`
+      `add_user?username=${payload.name}&password=${payload.password}&role=${payload.role}`
     );
+    // if(response.error===0){
     dispatch(loginSuccessful(response.data));
+    // }
   } catch (error) {
     dispatch(hasError(error));
-    console.log(e, "gggggg");
   }
 };
 export const {startLoading,hasError,loginSuccessful,signupResetReducer}=signUp.actions;

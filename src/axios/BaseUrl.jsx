@@ -1,5 +1,5 @@
 import axios from "axios";
 const Instance=axios.create({
-    baseURL:"https://etechpolltesting.onreander.com",
+    baseURL:"https://etechpolltesting.onrender.com",
 })
 export default Instance;
