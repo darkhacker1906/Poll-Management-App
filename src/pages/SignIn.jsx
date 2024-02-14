@@ -1,4 +1,4 @@
-import  React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -27,16 +27,17 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
   const signinSlice = useSelector((state) => state.signin);
-  const navigate=useNavigate();
-  useEffect(()=>{
-     if (signinSlice.isSuccess && signinSlice.data.token) {
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (signinSlice.isSuccess && signinSlice.data.token) {
       const decode = jwtDecode(signinSlice.data.token);
-      console.log(decode,"ggggggggggggggf");
       localStorage.setItem("token", signinSlice.data.token);
       localStorage.setItem("role", decode.role);
       dispatch(loginResetReducer());
-     }
-  }, [signinSlice.isSuccess])
+    }
+  }, [signinSlice.isSuccess]);
+
   const initialValues = {
     username: "",
     password: "",
@@ -55,17 +56,20 @@ export default function SignIn() {
       },
     });
 
-    let token = localStorage.getItem("token");
-    let role = localStorage.getItem("role");
-    useEffect(()=>{
-      if(token){
-        if(role==="admin"){
-          navigate("/admin");
-        }else{
-          navigate("/user")
-        }
+  let token = localStorage.getItem("token");
+  console.log(token);
+  let role = localStorage.getItem("role");
+  useEffect(() => {
+    if (token) {
+      console.log(role, "lllllll");
+      if (role.toLocaleLowerCase() === "admin") {
+        navigate("/admin");
       }
-    },[token,role,navigate])
+      if (role.toLocaleLowerCase() === "user") {
+        navigate("/user");
+      }
+    }
+  }, [token, role, navigate]);
   return (
     <ThemeProvider theme={defaultTheme}>
       <Grid
