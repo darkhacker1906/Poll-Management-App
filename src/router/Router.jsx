@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import SignIn from '../pages/SignIn'
 import SignUp from '../pages/SignUp'
@@ -7,6 +7,7 @@ import UserDashBoard from '../pages/UserDashBoard'
 import AddPoll from '../pages/AddPoll'
 
 function Router() {
+  const [isAuthenticated,setIsAuthenticated]=useState(false);
   return (
     <div>
       <Routes>
