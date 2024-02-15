@@ -41,13 +41,7 @@ export const signInApi = (payload) => async (dispatch) => {
     let response = await Instance.post(
       `login?username=${payload.username}&password=${payload.password}`
     );
-// if(response.data.error==1){
-//   dispatch(hasError());
-// }
-// else{
-  dispatch(loginSuccessful(response.data));
-// }
-
+    dispatch(loginSuccessful(response.data));
   } catch (error) {
     dispatch(hasError(error));
   }
