@@ -81,6 +81,9 @@ export default function SignIn() {
         navigate("/user");
       }
     }
+    else{
+      navigate("/")
+    }
   }, [token, role, navigate]);
   return (
     <ThemeProvider theme={defaultTheme}>
