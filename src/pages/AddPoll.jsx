@@ -11,6 +11,12 @@ import React, { useState } from "react";
 import AddPollimg from "../assets/images/AddPollimg.jpeg";
 
 function AddPoll() {
+  const initialValues={
+    title:"",
+    option1:"",
+    option2:"",
+
+  }
   const [rowData, setRowData] = useState([]);
   const addInputField = () => {
     const data = [...rowData, ""];
@@ -32,9 +38,9 @@ function AddPoll() {
               <Typography sx={{ textAlign: "center" }} variant="h4">
                 Add Poll
               </Typography>
-              <TextField variant="outlined" label="Title" fullWidth />
-              <TextField variant="outlined" label="Option1" fullWidth />
-              <TextField variant="outlined" label="Option2" fullWidth />
+              <TextField variant="outlined" label="Title" name="title"  fullWidth />
+              <TextField variant="outlined" label="Option1" name="option1"fullWidth />
+              <TextField variant="outlined" label="Option2" name="option2" fullWidth />
               {rowData.map((data, index) => (
                 <TextField
                   key={index}

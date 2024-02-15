@@ -199,9 +199,9 @@ export default function SignUp() {
                     )}
                   </FormControl>
                 </Box>
-                {isLoading ? (
+                {isLoading ? <Box display={"flex"} sx={{justifyContent:"center",mb:2}}>
                   <CircularProgress />
-                ) : (
+                </Box> : (
                   <Button
                     type="submit"
                     fullWidth

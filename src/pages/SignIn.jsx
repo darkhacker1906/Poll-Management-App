@@ -171,8 +171,10 @@ export default function SignIn() {
                 {errors.password && touched.password && (
                   <FormError error_msg={errors.password} />
                 )}
-                {isLoading ? (
-                  <CircularProgress sx={{ textAlign: "center" }} />
+                {isLoading ? (<Box display={"flex"} sx={{justifyContent:"center",mb:2}}>
+                  <CircularProgress />
+                </Box>
+                  
                 ) : (
                   <Button
                     type="submit"
