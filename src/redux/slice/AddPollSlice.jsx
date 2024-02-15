@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
+import Instance from "../../axios/BaseUrl";
 const initialState = {
     loading: false,
     isError: false,
     isSuccess: false,
     data: {},
   };
-  export const AddPoll={
+  export const addPoll=createSlice({
     name: "addPoll",
   initialState: initialState,
    reducers:{
@@ -13,7 +14,7 @@ const initialState = {
         state.loading = true;
         state.isError = false;
     },
-    pollingSuccessful: (state, action) => {
+    addPollSuccessful: (state, action) => {
         state.loading = false;
         state.isError = false;
         state.isSuccess = true;
@@ -32,7 +33,18 @@ const initialState = {
         state.data = {};
       },
    }
-  }
+  })
   export const addPollApi=(payload)=>async (dispatch)=>{
+    console.log(payload);
+    dispatch(startLoading());
+   try{
+    let response=await Instance.post(`?title=first%20polll&options=${payload.option1}${payload.option2}`)
+    console.log(response);
 
+   }catch{
+
+   }
   }
+  export const { startLoading, hasError, addPollSuccessful, addPollResetReducer } =
+  addPoll.actions;
+export default addPoll.reducer;

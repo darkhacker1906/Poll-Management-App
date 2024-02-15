@@ -13,9 +13,7 @@ function Router() {
       <Routes>
         <Route path='/' element={<SignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-        {/* <Route path='/admin' element={<AdminDashBoard/>}/> */}
         <Route  path='/admin' element={<PrivateRoute Component={AdminDashBoard}/>}/>
-        {/* <Route path='/user' element={<UserDashBoard/>}/> */}
         <Route path='/user' element={<PrivateRoute Component={UserDashBoard}/>}/>
         <Route path='/admin/addpoll' element={<AddPoll/>}/>
       </Routes>

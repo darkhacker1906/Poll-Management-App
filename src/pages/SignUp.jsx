@@ -237,4 +237,3 @@ export default function SignUp() {
     </Box>
   );
 }
-// export default SignUp
