@@ -23,16 +23,11 @@ function AddPoll() {
     option2:"",
 
   }
-  // const [rowData, setRowData] = useState([]);
-  // const addInputField = () => {
-  //   const data = [...rowData, ""];
-  //   setRowData(data);
-  // };
-  // const handleChange = (e, index) => {
-  //   const newData = [...rowData];
-  //   newData[index] = e.target.value;
-  //   setRowData(newData);
-  // };
+  const [rowData, setRowData] = useState([]);
+  const addInputField = () => {
+    const data = [...rowData, ""];
+    setRowData(data);
+  };
   const {handleSubmit,resetForm,
     handleChange,
     values}=useFormik({
@@ -40,7 +35,6 @@ function AddPoll() {
       onSubmit: (values) =>{
         dispatch(addPollApi(values));
         dispatch(addPollResetReducer());
-        // navigate("/admin")
         resetForm();
       }
     })
@@ -52,7 +46,6 @@ function AddPoll() {
           sx={{ minWidth: 300, width: "35%", margin: "auto", borderRadius: 5 }}
         >
           <CardContent>
-          {/* <form onSubmit={handleSubmit}> */}
             <Stack direction={"column"} spacing={2} as="form" onSubmit={handleSubmit}>
               <Typography sx={{ textAlign: "center" }} variant="h4">
                 Add Poll
@@ -60,23 +53,23 @@ function AddPoll() {
               <TextField variant="outlined" label="Title" name="title" value={values.name} onChange={handleChange} fullWidth />
               <TextField variant="outlined" label="Option1" name="option1" value={values.name} onChange={handleChange} fullWidth />
               <TextField variant="outlined" label="Option2" name="option2" value={values.name} onChange={handleChange} fullWidth />
-              {/* {rowData.map((data, index) => (
+              {rowData.map((data, index) => (
                 <TextField
                   key={index}
-                  onChange={(e) => {
-                    handleChange(e, index);
-                  }}
+                  onChange={handleChange}
                   variant="outlined"
-                  label={`Option ${index + 3}`}
+                  value={values.name}
+                  label={`Option${index + 3}`}
+                  name={`Option${index + 3}`}
                   fullWidth
                 />
-           ))} */}
+           ))}
 
               <Box>
                 <Button
                   variant="contained"
                   sx={{ background: "#08879C" }}
-                  // onClick={addInputField}
+                  onClick={addInputField}
                 >
                   Add Option
                 </Button>
@@ -88,7 +81,6 @@ function AddPoll() {
                 Cancel
               </Button>
             </Stack>
-            {/* </form> */}
           </CardContent>
         </Card>
       </Stack>
