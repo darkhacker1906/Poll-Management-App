@@ -25,6 +25,9 @@ function AdminDashBoard() {
     localStorage.clear();
   };
   const adminPollData = useSelector((state) => state.adminPoll.data);
+  const handlePoll=()=>{
+    navigate("/admin/addpoll");
+  }
   useEffect(() => {
     dispatch(AdminPollApi());
   }, [dispatch]);
@@ -51,14 +54,14 @@ function AdminDashBoard() {
           <Typography variant="h5" color={"white"}>
             Admin dashboard
           </Typography>
-          <NavLink
+          {/* <NavLink
             to={"/admin/addpoll"}
             style={{ color: "white", textDecoration: "none" }}
           >
-            {" "}
-            Add poll
-          </NavLink>
-          <Button variant="contained" onClick={handleLogout}>
+            <Typography>Add Poll</Typography>
+          </NavLink> */}
+          <Button onClick={handlePoll} sx={{color:"white"}} > Add Poll</Button>
+          <Button  onClick={handleLogout} sx={{color:"white"}}>
             Logout
           </Button>
         </Box>
