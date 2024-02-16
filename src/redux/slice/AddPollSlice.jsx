@@ -41,7 +41,7 @@ export const addPollApi = (payload) => async (dispatch) => {
   try {
     dispatch(startLoading());
     let response = await Instance.post(
-      `add_poll?title=${payload.title}&options=${optionsString}`
+      `add_poll?title=${payload.title}&options=${payload.option1}`
     );
     if (response.data.error === 0) {
       dispatch(addPoll.actions.addPollSuccessful(response.data));
