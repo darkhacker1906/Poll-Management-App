@@ -6,14 +6,15 @@ const initialState = {
   isSuccess: false,
   data: {},
 };
-export const signIn = createSlice({
-  name: "signIn",
+export const addPoll = createSlice({
+  name: "addPoll",
   initialState: initialState,
   reducers: {
     startLoading: (state) => {
-      (state.loading = true), (state.isError = false);
+      state.loading = true;
+      state.isError = false;
     },
-    loginSuccessful: (state, action) => {
+    addPollSuccessful: (state, action) => {
       state.loading = false;
       state.isError = false;
       state.isSuccess = true;
@@ -25,8 +26,7 @@ export const signIn = createSlice({
       state.isSuccess = false;
       state.errorMessage = action.payload;
     },
-    loginResetReducer(state) {
-      console.log("ggggggggg");
+    addPollResetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
@@ -34,18 +34,28 @@ export const signIn = createSlice({
     },
   },
 });
-
-export const signInApi = (payload) => async (dispatch) => {
+export const addPollApi = (payload) => async (dispatch) => {
   dispatch(startLoading());
   try {
+    const optionsString = Object.values(payload)
+      .filter((value) => value !== payload.title)
+      .join(",");
+      console.log(optionsString);
     let response = await Instance.post(
-      `login?username=${payload.username}&password=${payload.password}`
+      `add_poll?title=${payload.title}&options=${optionsString}`
     );
-    dispatch(loginSuccessful(response.data));
+    console.log(response);
+    // if (response.data.error === 0) {
+      dispatch(addPoll.actions.addPollSuccessful(response.data));
+    // }
   } catch (error) {
-    dispatch(hasError(error));
+    console.log(error.message);
   }
 };
-export const { startLoading, hasError, loginSuccessful, loginResetReducer } =
-  signIn.actions;
-export default signIn.reducer;
+export const {
+  startLoading,
+  hasError,
+  addPollSuccessful,
+  addPollResetReducer,
+} = addPoll.actions;
+export default addPoll.reducer;

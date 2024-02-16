@@ -11,7 +11,7 @@ function AdminDashBoard() {
   }
   return (
     <div>
-      <Typography variant='h1' color={"red"}>Admin dashboard</Typography>
+      <Typography variant='h5' color={"red"}>Admin dashboard</Typography>
       <NavLink to={"/admin/addpoll"} > Add poll</NavLink>
       <Button variant='contained'onClick={handleLogout}>Logout</Button>
     </div>
