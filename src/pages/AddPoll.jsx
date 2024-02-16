@@ -3,25 +3,28 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddPollimg from "../assets/images/AddPollimg.jpeg";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { dispatch } from "../redux/store/store";
 import { useSelector } from "react-redux";
 import { addPollApi, addPollResetReducer } from "../redux/slice/AddPollSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 function AddPoll() {
   const navigate=useNavigate();
+  const addPollslice=useSelector((state)=>state.addPoll);
+  const isLoading=addPollslice.loading;
   const initialValues={
     title:"",
     option1:"",
     option2:"",
-
   }
   const [rowData, setRowData] = useState([]);
   const addInputField = () => {
@@ -38,9 +41,15 @@ function AddPoll() {
         resetForm();
       }
     })
+    useEffect(() => {
+      if (addPollslice.isSuccess) {
+        navigate("/admin");
+      } else if (addPollslice.isError) {
+        toast.error("Error occurred while adding poll.",{autoClose:1500});
+      }
+    }, [addPollslice.isSuccess, addPollslice.error]);
   return (
     <Box sx={{ backgroundImage: `url(${AddPollimg})` }}>
-
       <Stack width={"100vw"} height={"100vh"}>
         <Card
           sx={{ minWidth: 300, width: "35%", margin: "auto", borderRadius: 5 }}
@@ -74,9 +83,12 @@ function AddPoll() {
                   Add Option
                 </Button>
               </Box>
-              <Button variant="contained" sx={{ background: "#08879C" }} type="submit" >
+              {
+                isLoading?<CircularProgress/>:<Button variant="contained" sx={{ background: "#08879C" }} type="submit" >
                 Submit
               </Button>
+              }
+              
               <Button variant="contained" sx={{ background: "#08879C" }}>
                 Cancel
               </Button>
@@ -84,6 +96,7 @@ function AddPoll() {
           </CardContent>
         </Card>
       </Stack>
+      <ToastContainer />
     </Box>
   );
 }

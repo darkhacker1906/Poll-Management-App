@@ -35,19 +35,20 @@ export const addPoll = createSlice({
   },
 });
 export const addPollApi = (payload) => async (dispatch) => {
-  dispatch(startLoading());
-  try {
-    const optionsString = Object.values(payload)
+  const optionsString = Object.values(payload)
       .filter((value) => value !== payload.title)
-      .join(",");
-      console.log(optionsString);
+      .join("____");
+  try {
+    dispatch(startLoading());
     let response = await Instance.post(
       `add_poll?title=${payload.title}&options=${optionsString}`
     );
-    console.log(response);
-    // if (response.data.error === 0) {
+    if (response.data.error === 0) {
       dispatch(addPoll.actions.addPollSuccessful(response.data));
-    // }
+    }
+    else{
+      dispatch(addPoll.actions.hasError(response.error));
+    }
   } catch (error) {
     console.log(error.message);
   }

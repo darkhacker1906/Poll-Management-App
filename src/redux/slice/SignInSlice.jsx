@@ -23,10 +23,9 @@ export const signIn = createSlice({
       state.loading = false;
       state.isError = true;
       state.isSuccess = false;
-      state.errorMessage = action.payload;
+      state.data = action.payload;
     },
     loginResetReducer(state) {
-      console.log("ggggggggg");
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
@@ -36,12 +35,19 @@ export const signIn = createSlice({
 });
 
 export const signInApi = (payload) => async (dispatch) => {
-  dispatch(startLoading());
   try {
+    dispatch(startLoading());
     let response = await Instance.post(
       `login?username=${payload.username}&password=${payload.password}`
     );
-    dispatch(loginSuccessful(response.data));
+    if(response.data.error==0){
+      console.log(response);
+      dispatch(loginSuccessful(response.data));
+    }
+    else{
+      dispatch(hasError(response.data));
+    }
+
   } catch (error) {
     dispatch(hasError(error));
   }

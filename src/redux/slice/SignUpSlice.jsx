@@ -24,7 +24,7 @@ export const signUp = createSlice({
       state.loading = false;
       state.isError = true;
       state.isSuccess = false;
-      state.errorMessage = action.payload;
+      state.data = action.payload;
     },
     signupResetReducer(state) {
       state.isError = false;
@@ -40,8 +40,13 @@ export const signUpapi = (payload) => async (dispatch) => {
     let response = await Instance.post(
       `add_user?username=${payload.username}&password=${payload.password}&role=${payload.role}`
     );
-    console.log(response);
-    dispatch(loginSuccessful(response.data));
+    if(response.error===0){
+      dispatch(loginSuccessful(response.data));
+    }
+    else{
+      dispatch(hasError(response.data));
+    }
+
   } catch (error) {
     dispatch(hasError(error));
   }
