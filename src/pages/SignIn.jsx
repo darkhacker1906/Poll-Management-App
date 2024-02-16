@@ -99,7 +99,6 @@ export default function SignIn() {
         <Stack
           p={{ lg: 3, xs: 0 }}
           sx={{
-            // backgroundImage: `url(${Signin})`,
             background:"linear-gradient(80deg, #2E3192, #1BFFFF)",
             backgroundSize: "cover",
             backgroundPosition: "center",
