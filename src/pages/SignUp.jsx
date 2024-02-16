@@ -81,7 +81,8 @@ export default function SignUp() {
     <Box
       sx={{
         justifyContent: "center",
-        backgroundImage: `url(${SignupImg})`,
+        // backgroundImage: `url(${SignupImg})`,
+        background:"linear-gradient(80deg, #D8B5FF ,  #1EAE98)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         objectFit: "cover",

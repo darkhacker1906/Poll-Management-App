@@ -10,7 +10,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
 import { signinSchema } from "../schemas/Validation";
-import Signin from "../assets/images/SigninImg.jpeg";
+// import Signin from "../assets/images/SigninImg.jpeg";
 import { CircularProgress, Stack } from "@mui/material";
 import FormError from "../schemas/formError";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -99,7 +99,8 @@ export default function SignIn() {
         <Stack
           p={{ lg: 3, xs: 0 }}
           sx={{
-            backgroundImage: `url(${Signin})`,
+            // backgroundImage: `url(${Signin})`,
+            background:"linear-gradient(80deg, #2E3192, #1BFFFF)",
             backgroundSize: "cover",
             backgroundPosition: "center",
             objectFit: "cover",
