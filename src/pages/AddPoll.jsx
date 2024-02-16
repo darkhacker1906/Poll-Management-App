@@ -49,8 +49,8 @@ function AddPoll() {
       }
     }, [addPollslice.isSuccess, addPollslice.error]);
   return (
-    <Box sx={{  background:"linear-gradient(80deg, #764BA2 ,  #667EEA)",}}>
-      <Stack width={"100vw"} height={"100vh"}>
+    <Box sx={{  background:"linear-gradient(80deg, #764BA2 ,#667EEA)"}} p={2}>
+      <Stack  minHeight={"100vh"}sx={{overflowY:"auto"}}>
         <Card
           sx={{ minWidth: 300, width: "35%", margin: "auto", borderRadius: 5 }}
         >
