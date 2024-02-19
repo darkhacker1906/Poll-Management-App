@@ -36,8 +36,8 @@ export const addPoll = createSlice({
 });
 export const addPollApi = (payload) => async (dispatch) => {
   const optionsString = Object.values(payload)
-      .filter((value) => value !== payload.title)
-      .join("____");
+    .filter((value) => value !== payload.title)
+    .join("____");
   try {
     dispatch(startLoading());
     let response = await Instance.post(
@@ -45,8 +45,7 @@ export const addPollApi = (payload) => async (dispatch) => {
     );
     if (response.data.error === 0) {
       dispatch(addPoll.actions.addPollSuccessful(response.data));
-    }
-    else{
+    } else {
       dispatch(addPoll.actions.hasError(response.error));
     }
   } catch (error) {

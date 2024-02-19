@@ -1,13 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import Instance from "../../axios/BaseUrl";
+import { dispatch } from "../store/store";
 const initialState = {
   loading: false,
   isError: false,
   isSuccess: false,
   data: {},
 };
-export const signUp = createSlice({
-  name: "signUp",
+
+const DeletePoll = createSlice({
+  name: "DeletePoll",
   initialState: initialState,
   reducers: {
     startLoading: (state) => {
@@ -26,31 +28,27 @@ export const signUp = createSlice({
       state.isSuccess = false;
       state.data = action.payload;
     },
-    signupResetReducer(state) {
+    resetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
       state.data = {};
     },
   },
-});;
-export const signUpapi = (payload) => async (dispatch) => {
+});
+
+export const DeletePollApi = (payload) => async () => {
+  dispatch(DeletePoll.actions.startLoading());
   try {
-    dispatch(startLoading());
-    let response = await Instance.post(
-      `add_user?username=${payload.username}&password=${payload.password}&role=${payload.role}`
-    );
-    if(response.data.error==0){
-
-      dispatch(loginSuccessful(response.data));
-    }
-    else{
-      dispatch(hasError(response.data));
-    }
-
-  } catch (error) {
-    dispatch(hasError(error));
+    let response = await Instance.delete(`delete_poll?id=${payload}`);
+    console.log(response);
+    dispatch(DeletePoll.actions.loginSuccessful(response.data));
+  } catch (e) {
+    dispatch(DeletePoll.actions.hasError(e));
   }
 };
-export const {startLoading,hasError,loginSuccessful,signupResetReducer}=signUp.actions;
-export default signUp.reducer
+
+export const { startLoading, loginSuccessful, hasError, resetReducer } =
+  DeletePoll.actions;
+
+export default DeletePoll.reducer;

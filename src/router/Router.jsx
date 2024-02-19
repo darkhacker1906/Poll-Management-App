@@ -6,6 +6,7 @@ import AdminDashBoard from '../pages/AdminDashBoard'
 import UserDashBoard from '../pages/UserDashBoard'
 import AddPoll from '../pages/AddPoll'
 import PrivateRoute from './PrivateRoute'
+import UserDetails from '../pages/UserDetails'
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
         <Route  path='/admin' element={<PrivateRoute Component={AdminDashBoard}/>}/>
         <Route path='/user' element={<PrivateRoute Component={UserDashBoard}/>}/>
         <Route path='/admin/addpoll' element={<AddPoll/>}/>
+        <Route path='admin/userdetails' element={<UserDetails/>}/>
       </Routes>
     </div>
   )

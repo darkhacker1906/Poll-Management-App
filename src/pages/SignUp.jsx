@@ -35,6 +35,7 @@ import "react-toastify/dist/ReactToastify.css";
 export default function SignUp() {
   const navigate = useNavigate();
   const signupSlice = useSelector((state) => state.signup);
+  // console.log(signupSlice);
   const isLoading = signupSlice.loading;
   const initialValues = {
     username: "",

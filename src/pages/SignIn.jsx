@@ -10,7 +10,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
 import { signinSchema } from "../schemas/Validation";
-// import Signin from "../assets/images/SigninImg.jpeg";
 import { CircularProgress, Stack } from "@mui/material";
 import FormError from "../schemas/formError";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -61,13 +60,11 @@ export default function SignIn() {
       localStorage.setItem("token", signinSlice.data.token);
       localStorage.setItem("role", decode.role);
       dispatch(loginResetReducer());
-  }
-    else if(signinSlice.isError){
+    } else if (signinSlice.isError) {
       toast.error("User does not exist!", { autoClose: 1500 });
       dispatch(loginResetReducer());
     }
-
-  }, [signinSlice.isSuccess,signinSlice.isError]);
+  }, [signinSlice.isSuccess, signinSlice.isError]);
 
   let token = localStorage.getItem("token");
   let role = localStorage.getItem("role");
@@ -78,9 +75,8 @@ export default function SignIn() {
       } else {
         navigate("/user");
       }
-    }
-    else{
-      navigate("/")
+    } else {
+      navigate("/");
     }
   }, [token, role, navigate]);
   return (
@@ -99,7 +95,7 @@ export default function SignIn() {
         <Stack
           p={{ lg: 3, xs: 0 }}
           sx={{
-            background:"linear-gradient(80deg, #2E3192, #1BFFFF)",
+            background: "linear-gradient(80deg, #2E3192, #1BFFFF)",
             backgroundSize: "cover",
             backgroundPosition: "center",
             objectFit: "cover",
@@ -169,10 +165,13 @@ export default function SignIn() {
                 {errors.password && touched.password && (
                   <FormError error_msg={errors.password} />
                 )}
-                {isLoading ? (<Box display={"flex"} sx={{justifyContent:"center",mb:2}}>
-                  <CircularProgress />
-                </Box>
-                  
+                {isLoading ? (
+                  <Box
+                    display={"flex"}
+                    sx={{ justifyContent: "center", mb: 2 }}
+                  >
+                    <CircularProgress />
+                  </Box>
                 ) : (
                   <Button
                     type="submit"
@@ -201,6 +200,6 @@ export default function SignIn() {
         </Stack>
       </Grid>
       <ToastContainer />
-     </>
+    </>
   );
 }

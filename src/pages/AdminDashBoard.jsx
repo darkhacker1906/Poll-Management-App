@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardContent,
+  CircularProgress,
   Grid,
   Stack,
   Typography,
@@ -13,24 +14,35 @@ import { useSelector } from "react-redux";
 import { AdminPollApi } from "../redux/slice/AdminPollSlice";
 import { dispatch } from "../redux/store/store";
 import { MdDelete } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import { DeletePollApi } from "../redux/slice/DeletePollSlice";
 
 function AdminDashBoard() {
   const navigate = useNavigate();
-
+  const [deleteId, setDeleteId] = useState(null);
+  const adminPollData = useSelector((state) => state.adminPoll.data);
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
+  const deletedLoading = useSelector((state) => state.deletePoll.loading);
   const handleLogout = () => {
     alert("Logging out");
     navigate("/");
     localStorage.clear();
   };
-  const adminPollData = useSelector((state) => state.adminPoll.data);
-  const handlePoll=()=>{
+
+  const handlePoll = () => {
     navigate("/admin/addpoll");
-  }
+  };
+  const handleDelete = (id) => {
+    dispatch(DeletePollApi(id));
+    setDeleteId(id);
+    toast.success("Poll  deleted successfully!", { autoClose: 1000 });
+  };
+
   useEffect(() => {
     dispatch(AdminPollApi());
-  }, [dispatch]);
+  }, [dispatch, deleteId, deletedLoading]);
+
   useEffect(() => {
     const halfData = Math.ceil(adminPollData.length / 2);
     setColumn1Data(adminPollData.slice(0, halfData));
@@ -54,14 +66,14 @@ function AdminDashBoard() {
           <Typography variant="h5" color={"white"}>
             Admin dashboard
           </Typography>
-          {/* <NavLink
-            to={"/admin/addpoll"}
-            style={{ color: "white", textDecoration: "none" }}
-          >
-            <Typography>Add Poll</Typography>
-          </NavLink> */}
-          <Button onClick={handlePoll} sx={{color:"white"}} > Add Poll</Button>
-          <Button  onClick={handleLogout} sx={{color:"white"}}>
+          <Button onClick={handlePoll} sx={{ color: "white" }}>
+            {" "}
+            Add Poll
+          </Button>
+          <NavLink to={"/admin/userdetails"}>
+            <Button sx={{ color: "white" }}>User Details</Button>
+          </NavLink>
+          <Button onClick={handleLogout} sx={{ color: "white" }}>
             Logout
           </Button>
         </Box>
@@ -84,12 +96,37 @@ function AdminDashBoard() {
                       sx={{ justifyContent: "space-between" }}
                     >
                       <Typography>{user.title}</Typography>{" "}
-                      <MdDelete fontSize={25} />
                     </Box>
 
                     {user.options.map((e, index) => (
-                      <Typography key={index}>{e.option}</Typography>
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography>{e.option}</Typography>
+                        <Typography>{e.vote}</Typography>
+                      </Box>
                     ))}
+                    {user._id === deleteId && deletedLoading ? (
+                      <CircularProgress />
+                    ) : (
+                      <Button
+                        onClick={() => handleDelete(user._id)}
+                        sx={{
+                          color: "black",
+                          background: "#f46161",
+                          "&:hover": {
+                            backgroundColor: "red",
+                          },
+                        }}
+                      >
+                        Delete
+                        <MdDelete fontSize={25} />
+                      </Button>
+                    )}
                   </CardContent>
                 )}
               </Card>
@@ -112,17 +149,34 @@ function AdminDashBoard() {
                     sx={{ justifyContent: "space-between" }}
                   >
                     <Typography>{user.title}</Typography>{" "}
-                    <MdDelete fontSize={25} />
                   </Box>
                   {user.options.map((e, index) => (
                     <Typography key={index}>{e.option}</Typography>
                   ))}
+                  {user._id === deleteId && deletedLoading ? (
+                    <CircularProgress />
+                  ) : (
+                    <Button
+                      onClick={() => handleDelete(user._id)}
+                      sx={{
+                        color: "black",
+                        background: "#f46161",
+                        "&:hover": {
+                          backgroundColor: "red",
+                        },
+                      }}
+                    >
+                      Delete
+                      <MdDelete fontSize={25} />
+                    </Button>
+                  )}
                 </CardContent>
               </Card>
             ))}
           </Grid>
         </Grid>
       </Stack>
+      <ToastContainer />
     </>
   );
 }
