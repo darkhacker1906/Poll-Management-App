@@ -8,7 +8,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import {
   CircularProgress,
   FormControl,
@@ -32,8 +31,6 @@ import {
 } from "../redux/slice/SignUpSlice";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const defaultTheme = createTheme();
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -68,23 +65,24 @@ export default function SignUp() {
   });
 
   useEffect(() => {
-    if (signupSlice.data.error === 1) {
-      toast.error("User already exists!");
+    if (signupSlice.isError) {
+      toast.error("User already exists!",{autoClose:1000});
       dispatch(signupResetReducer());
-    } else if (signupSlice.data.error === 0) {
-      dispatch(signupResetReducer());
+    } else if (signupSlice.isSuccess) {
       setTimeout(() => {
         navigate("/");
       }, 1000);
       toast.success("Sign up successful!", { autoClose: 1000 });
     }
-  }, [signupSlice.isSuccess]);
+    dispatch(signupResetReducer());
+  }, [signupSlice.isSuccess,signupSlice.isError]);
 
   return (
     <Box
       sx={{
         justifyContent: "center",
-        backgroundImage: `url(${SignupImg})`,
+        // backgroundImage: `url(${SignupImg})`,
+        background:"linear-gradient(80deg, #D8B5FF ,  #1EAE98)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         objectFit: "cover",
@@ -96,7 +94,7 @@ export default function SignUp() {
         overflow: "auto",
       }}
     >
-      <ThemeProvider theme={defaultTheme}>
+      <>
         <Container
           component="main"
           sx={{
@@ -232,7 +230,7 @@ export default function SignUp() {
             </Box>
           </Stack>
         </Container>
-      </ThemeProvider>
+      </>
       <ToastContainer />
     </Box>
   );

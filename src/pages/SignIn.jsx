@@ -8,10 +8,9 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useFormik } from "formik";
 import { signinSchema } from "../schemas/Validation";
-import Signin from "../assets/images/SigninImg.jpeg";
+// import Signin from "../assets/images/SigninImg.jpeg";
 import { CircularProgress, Stack } from "@mui/material";
 import FormError from "../schemas/formError";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -25,12 +24,9 @@ import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
 
-const defaultTheme = createTheme();
-
 export default function SignIn() {
   const signinSlice = useSelector((state) => state.signin);
   const isLoading = signinSlice.loading;
-  console.log(isLoading);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -65,11 +61,13 @@ export default function SignIn() {
       localStorage.setItem("token", signinSlice.data.token);
       localStorage.setItem("role", decode.role);
       dispatch(loginResetReducer());
-    } else if (signinSlice.data.error === 1) {
+  }
+    else if(signinSlice.isError){
       toast.error("User does not exist!", { autoClose: 1500 });
       dispatch(loginResetReducer());
     }
-  }, [signinSlice.isSuccess, signinSlice.data.error]);
+
+  }, [signinSlice.isSuccess,signinSlice.isError]);
 
   let token = localStorage.getItem("token");
   let role = localStorage.getItem("role");
@@ -86,7 +84,7 @@ export default function SignIn() {
     }
   }, [token, role, navigate]);
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Grid
         container
         component="main"
@@ -101,7 +99,7 @@ export default function SignIn() {
         <Stack
           p={{ lg: 3, xs: 0 }}
           sx={{
-            backgroundImage: `url(${Signin})`,
+            background:"linear-gradient(80deg, #2E3192, #1BFFFF)",
             backgroundSize: "cover",
             backgroundPosition: "center",
             objectFit: "cover",
@@ -203,6 +201,6 @@ export default function SignIn() {
         </Stack>
       </Grid>
       <ToastContainer />
-    </ThemeProvider>
+     </>
   );
 }
