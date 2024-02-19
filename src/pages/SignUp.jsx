@@ -139,7 +139,7 @@ export default function SignUp() {
                     id="username"
                     label="Username"
                     name="username"
-                    value={values.username}
+                    value={values.username.trim()}
                     onBlur={handleBlur}
                     onChange={handleChange}
                   />

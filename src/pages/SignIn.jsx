@@ -45,6 +45,11 @@ export default function SignIn() {
     validationSchema: signinSchema,
     onSubmit: (values) => {
       try {
+        // for (const i in values) {
+        //   if (typeof values[i] === 'string') {
+        //     values[i] = values[key].trim();
+        //   }
+        // }
         dispatch(startLoading());
         dispatch(signInApi(values));
       } catch (error) {
@@ -95,7 +100,7 @@ export default function SignIn() {
         <Stack
           p={{ lg: 3, xs: 0 }}
           sx={{
-            background: "linear-gradient(80deg, #2E3192, #1BFFFF)",
+            background: "linear-gradient( #2E3192, #23A7D1)",
             backgroundSize: "cover",
             backgroundPosition: "center",
             objectFit: "cover",
@@ -116,7 +121,6 @@ export default function SignIn() {
             height={{ sm: "auto", md: "auto", xs: "100%" }}
             square
             borderRadius={{ lg: 5, xs: 0 }}
-            sx={{ opacity: ".8" }}
           >
             <Stack
               sx={{
@@ -141,7 +145,7 @@ export default function SignIn() {
                 <TextField
                   margin="normal"
                   fullWidth
-                  value={values.username}
+                  value={values.username.trim()}
                   id="username"
                   label="Username"
                   name="username"
