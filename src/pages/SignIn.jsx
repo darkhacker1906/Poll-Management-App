@@ -45,11 +45,6 @@ export default function SignIn() {
     validationSchema: signinSchema,
     onSubmit: (values) => {
       try {
-        // for (const i in values) {
-        //   if (typeof values[i] === 'string') {
-        //     values[i] = values[key].trim();
-        //   }
-        // }
         dispatch(startLoading());
         dispatch(signInApi(values));
       } catch (error) {
@@ -162,7 +157,7 @@ export default function SignIn() {
                   label="Password"
                   type="password"
                   id="password"
-                  value={values.password}
+                  value={values.password.trim()}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />

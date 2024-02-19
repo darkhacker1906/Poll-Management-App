@@ -13,32 +13,33 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { AdminPollApi } from "../redux/slice/AdminPollSlice";
 import { dispatch } from "../redux/store/store";
-import { MdDelete } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
-import { DeletePollApi } from "../redux/slice/DeletePollSlice";
 import { userVoteApi } from "../redux/slice/UserVoteSlice";
 
-function AdminDashBoard() {
+function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
-const UserVoteData=useSelector((state)=>state.userVote);
+  const UserVoteData = useSelector((state) => state.userVote);
+  console.log(UserVoteData);
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
-  const token=localStorage.getItem("token");
-  
+  const token = localStorage.getItem("token");
+  const [addId,setAddId]=useState(null);
+
   const handleLogout = () => {
     alert("Logging out");
     navigate("/");
     localStorage.clear();
   };
-  const add_poll=(id,option)=>{
+  const add_poll = (id, option) => {
     const header = {
-      headers:{
-        access_token:token
-      }
+      headers: {
+        access_token: token,
+      },
     };
-   dispatch(userVoteApi({id,option,header}));
-  }
+    dispatch(userVoteApi({ id, option, header }));
+    setAddId(id);
+  };
   useEffect(() => {
     dispatch(AdminPollApi());
   }, [dispatch]);
@@ -48,6 +49,14 @@ const UserVoteData=useSelector((state)=>state.userVote);
     setColumn1Data(adminPollData.slice(0, halfData));
     setColumn2Data(adminPollData.slice(halfData));
   }, [adminPollData]);
+
+  useEffect(() => {
+    if ( UserVoteData.isSuccess) {
+      toast.success("Vote added successfully", { autoClose: 1000 });
+    } else if (addId !== null && UserVoteData && UserVoteData.error !== 0) {
+      toast.error("Failed to add vote",{autoClose:1000});
+    }
+  }, [UserVoteData.isSuccess, addId]);
 
   return (
     <>
@@ -97,6 +106,51 @@ const UserVoteData=useSelector((state)=>state.userVote);
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
+                          mt: 1,
+                        }}
+                      >
+                        <Typography>{e.option}</Typography>
+                        <Button
+                          variant="contained"
+                          sx={{ background: "#1A778A" }}
+                          onClick={() => add_poll(user._id, e.option)}
+                        >
+                          Vote
+                        </Button>
+                      </Box>
+                    ))}
+                    <Box>View a poll</Box>
+                  </CardContent>
+                )}
+              </Card>
+            ))}
+          </Grid>
+          <Grid item xs={12} sm={6} md={6}>
+            {column2Data.map((user) => (
+              <Card
+                key={user._id}
+                sx={{
+                  minWidth: 300,
+                  width: "100%",
+                  borderRadius: 5,
+                  marginTop: 3,
+                }}
+              >
+                {user && (
+                  <CardContent>
+                    <Box
+                      display={"flex"}
+                      sx={{ justifyContent: "space-between" }}
+                    >
+                      <Typography>{user.title}</Typography>{" "}
+                    </Box>
+
+                    {user.options.map((e, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
                           mt: 2,
                         }}
                       >
@@ -104,7 +158,7 @@ const UserVoteData=useSelector((state)=>state.userVote);
                         <Button
                           variant="contained"
                           sx={{ background: "#1A778A" }}
-                          onClick={()=>add_poll(user._id,e.option)}
+                          onClick={() => add_poll(user._id, e.option)}
                         >
                           Vote
                         </Button>
@@ -115,50 +169,6 @@ const UserVoteData=useSelector((state)=>state.userVote);
               </Card>
             ))}
           </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            {column2Data.map((user) => (
-             <Card
-             key={user._id}
-             sx={{
-               minWidth: 300,
-               width: "100%",
-               borderRadius: 5,
-               marginTop: 3,
-             }}
-           >
-             {user && (
-               <CardContent>
-                 <Box
-                   display={"flex"}
-                   sx={{ justifyContent: "space-between" }}
-                 >
-                   <Typography>{user.title}</Typography>{" "}
-                 </Box>
-
-                 {user.options.map((e, index) => (
-                   <Box
-                     key={index}
-                     sx={{
-                       display: "flex",
-                       justifyContent: "space-between",
-                       mt: 2,
-                     }}
-                   >
-                     <Typography>{e.option}</Typography>
-                     <Button
-                       variant="contained"
-                       sx={{ background: "#1A778A" }}
-                       onClick={()=>add_poll(user._id,e.option)}
-                     >
-                       Vote
-                     </Button>
-                   </Box>
-                 ))}
-               </CardContent>
-             )}
-           </Card>
-            ))}
-          </Grid>
         </Grid>
       </Stack>
       <ToastContainer />
@@ -166,4 +176,4 @@ const UserVoteData=useSelector((state)=>state.userVote);
   );
 }
 
-export default AdminDashBoard;
+export default UserDashBoard;

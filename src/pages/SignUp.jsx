@@ -82,7 +82,6 @@ export default function SignUp() {
     <Box
       sx={{
         justifyContent: "center",
-        // backgroundImage: `url(${SignupImg})`,
         background:"linear-gradient(80deg, #D8B5FF ,  #1EAE98)",
         backgroundSize: "cover",
         backgroundPosition: "center",
@@ -155,7 +154,7 @@ export default function SignUp() {
                     label="Password"
                     type="password"
                     id="password"
-                    value={values.password}
+                    value={values.password.trim()}
                     onBlur={handleBlur}
                     onChange={handleChange}
                   />
@@ -171,7 +170,7 @@ export default function SignUp() {
                     label=" Confirm Password"
                     type="password"
                     id="confirm_password"
-                    value={values.confirm_password}
+                    value={values.confirm_password.trim()}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
