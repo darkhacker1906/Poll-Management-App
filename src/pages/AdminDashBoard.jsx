@@ -149,10 +149,20 @@ function AdminDashBoard() {
                     sx={{ justifyContent: "space-between" }}
                   >
                     <Typography>{user.title}</Typography>{" "}
+                    <Typography>{user.vote}</Typography>
                   </Box>
                   {user.options.map((e, index) => (
-                    <Typography key={index}>{e.option}</Typography>
-                  ))}
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Typography>{e.option}</Typography>
+                        <Typography>{e.vote}</Typography>
+                      </Box>
+                    ))}
                   {user._id === deleteId && deletedLoading ? (
                     <CircularProgress />
                   ) : (
