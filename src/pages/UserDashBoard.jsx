@@ -20,11 +20,15 @@ function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
   const UserVoteData = useSelector((state) => state.userVote);
-  console.log(UserVoteData);
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
   const token = localStorage.getItem("token");
   const [addId,setAddId]=useState(null);
+  useEffect(() => {
+    const storedDisabledOptions = JSON.parse(localStorage.getItem("disabledOptions")) || {};
+    setDisabledOptions(storedDisabledOptions);
+  }, []);
+  const [disabledOptions,setDisabledOptions]=useState({});
 
   const handleLogout = () => {
     alert("Logging out");
@@ -39,6 +43,10 @@ function UserDashBoard() {
     };
     dispatch(userVoteApi({ id, option, header }));
     setAddId(id);
+    setDisabledOptions((prev)=>({
+      ...prev,addId:OptionIndex,
+    }));
+    localStorage.setItem("disabledOptions", JSON.stringify({ ...disabledOptions, addId: OptionIndex }));
   };
   useEffect(() => {
     dispatch(AdminPollApi());
