@@ -80,7 +80,7 @@ function AddPoll() {
               onSubmit={handleSubmit}
             >
               <Typography sx={{ textAlign: "center" }} variant="h4">
-                Add Poll Thytth check
+                Add Poll 
               </Typography>
               <TextField
                 variant="outlined"

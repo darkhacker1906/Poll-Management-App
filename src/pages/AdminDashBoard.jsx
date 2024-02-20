@@ -32,6 +32,12 @@ function AdminDashBoard() {
     setDeleteId(id);
     toast.success("Poll  deleted successfully!", { autoClose: 1000 });
   };
+  const handleEdit = (titleID) => {
+    const selectedPoll = adminPollData.find((poll) => poll._id === titleID);
+    if (selectedPoll) {
+      navigate(`/edit/${titleID}`, { state: { pollData: selectedPoll } });
+    }
+  };
 
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -80,7 +86,7 @@ function AdminDashBoard() {
                       sx={{ justifyContent: "space-between",background:"#08B3B7" }}
                     >
                       <Typography p={1}>{user.title}</Typography>{" "}
-                      <MdEdit />
+                         <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",mr:1,fontSize:"20px"}}><MdEdit onClick={()=>handleEdit(user._id)}/></Box>
                     </Box>
 
                     {user.options.map((e, index) => (
@@ -138,6 +144,7 @@ function AdminDashBoard() {
                     sx={{ justifyContent: "space-between",background:"#08B3B7" }}
                   >
                     <Typography sx={{p:1}}>{user.title}</Typography>{" "}
+                    <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",mr:1,fontSize:"20px"}}><MdEdit onClick={()=>handleEdit()}/></Box>
                   </Box>
                   {user.options.map((e, index) => (
                       <Box
