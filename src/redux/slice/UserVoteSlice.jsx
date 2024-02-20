@@ -1,20 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { dispatch } from "../store/store";
 import Instance from "../../axios/BaseUrl";
+
 const initialState = {
   loading: false,
   isError: false,
   isSuccess: false,
-  data: {},
+  data: [],
 };
-export const signUp = createSlice({
-  name: "signUp",
+
+const userVote = createSlice({
+  name: "userVote",
   initialState: initialState,
   reducers: {
     startLoading: (state) => {
       state.loading = true;
       state.isError = false;
     },
-    loginSuccessful: (state, action) => {
+    voteSuccessful: (state, action) => {
       state.loading = false;
       state.isError = false;
       state.isSuccess = true;
@@ -26,31 +29,38 @@ export const signUp = createSlice({
       state.isSuccess = false;
       state.data = action.payload;
     },
-    signupResetReducer(state) {
+    resetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
-      state.data = {};
+      state.data = [];
     },
   },
-});;
-export const signUpapi = (payload) => async (dispatch) => {
+});
+
+export async function userVoteApi(payload) {
+const {id,option,header}=payload;
+console.log(payload);
   try {
     dispatch(startLoading());
-    let response = await Instance.post(
-      `add_user?username=${payload.username}&password=${payload.password}&role=${payload.role}`
-    );
-    if(response.data.error==0){
-
-      dispatch(loginSuccessful(response.data));
+    let response = await Instance.get(
+        `do_vote?id=${id}&option_text=${option}`,
+        header
+      );
+    console.log(response);
+    if(response.data.error === 0){
+        dispatch(voteSuccessful(response.data));
     }
     else{
-      dispatch(hasError(response.data));
+        dispatch(hasError(response.data));
     }
-
-  } catch (error) {
-    dispatch(hasError(error));
+  } catch (e) {
+    dispatch(hasError(e));
+    console.log(e, "sdffsf");
   }
-};
-export const {startLoading,hasError,loginSuccessful,signupResetReducer}=signUp.actions;
-export default signUp.reducer
+}
+
+export const { startLoading, getSuccess, voteSuccessful, hasError } =
+  userVote.actions;
+
+export default userVote.reducer;
