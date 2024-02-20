@@ -17,6 +17,7 @@ import { MdDelete } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import { DeletePollApi } from "../redux/slice/DeletePollSlice";
 import Navbar from "../components/Navbar";
+import { MdEdit } from "react-icons/md";
 
 function AdminDashBoard() {
   const navigate = useNavigate();
@@ -79,6 +80,7 @@ function AdminDashBoard() {
                       sx={{ justifyContent: "space-between",background:"#08B3B7" }}
                     >
                       <Typography p={1}>{user.title}</Typography>{" "}
+                      <MdEdit />
                     </Box>
 
                     {user.options.map((e, index) => (
