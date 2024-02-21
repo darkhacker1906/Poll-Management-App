@@ -38,6 +38,9 @@ function AdminDashBoard() {
       navigate(`/edit/${titleID}`, { state: { pollData: selectedPoll } });
     }
   };
+  const handleAddOption=(id)=>{
+    navigate("/admin/addoption", { state: { id: id } })
+  }
 
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -63,7 +66,7 @@ function AdminDashBoard() {
           display={"flex"}
           sx={{ justifyContent: "space-around", color: "white" }}
         >
-          <Navbar/>
+          <Navbar />
         </Box>
         <Grid container spacing={5} p={5}>
           <Grid item xs={12} md={6} sm={6}>
@@ -75,18 +78,31 @@ function AdminDashBoard() {
                   width: "100%",
                   borderRadius: 5,
                   marginTop: 3,
-                  pt:2,
-                  opacity:.8,
+                  pt: 2,
+                  opacity: 0.8,
                 }}
               >
                 {user && (
                   <CardContent>
                     <Box
                       display={"flex"}
-                      sx={{ justifyContent: "space-between",background:"#08B3B7" }}
+                      sx={{
+                        justifyContent: "space-between",
+                        background: "#08B3B7",
+                      }}
                     >
                       <Typography p={1}>{user.title}</Typography>{" "}
-                         <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",mr:1,fontSize:"20px"}}><MdEdit onClick={()=>handleEdit(user._id)}/></Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          mr: 1,
+                          fontSize: "20px",
+                        }}
+                      >
+                        <MdEdit onClick={() => handleEdit(user._id)} />
+                      </Box>
                     </Box>
 
                     {user.options.map((e, index) => (
@@ -101,6 +117,20 @@ function AdminDashBoard() {
                         <Typography>Vote {e.vote}</Typography>
                       </Box>
                     ))}
+                    <Button
+                      variant="contained"
+                      onClick={()=>handleAddOption(user._id)}
+                      sx={{
+                        mr: 1,
+                        background: "#168594",
+                        fontWeight: "bold",
+                        "&:hover": {
+                          backgroundColor: "#168594",
+                        },
+                      }}
+                    >
+                      Add Option
+                    </Button>
                     {user._id === deleteId && deletedLoading ? (
                       <CircularProgress />
                     ) : (
@@ -108,9 +138,9 @@ function AdminDashBoard() {
                         onClick={() => handleDelete(user._id)}
                         sx={{
                           color: "#ffffff",
-                          fontWeight:"bold",
+                          fontWeight: "bold",
                           // background: "#f46161",
-                          background:"#FF0000",
+                          background: "#FF0000",
                           "&:hover": {
                             backgroundColor: "red",
                           },
@@ -134,30 +164,57 @@ function AdminDashBoard() {
                   width: "100%",
                   borderRadius: 5,
                   marginTop: 3,
-                  pt:2,
-                  opacity:.8
+                  pt: 2,
+                  opacity: 0.8,
                 }}
               >
                 <CardContent>
                   <Box
                     display={"flex"}
-                    sx={{ justifyContent: "space-between",background:"#08B3B7" }}
+                    sx={{
+                      justifyContent: "space-between",
+                      background: "#08B3B7",
+                    }}
                   >
-                    <Typography sx={{p:1}}>{user.title}</Typography>{" "}
-                    <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",mr:1,fontSize:"20px"}}><MdEdit onClick={()=>handleEdit()}/></Box>
+                    <Typography sx={{ p: 1 }}>{user.title}</Typography>{" "}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mr: 1,
+                        fontSize: "20px",
+                      }}
+                    >
+                      <MdEdit onClick={() => handleEdit()} />
+                    </Box>
                   </Box>
                   {user.options.map((e, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Typography p={1}> {e.option}</Typography>
-                        <Typography>Vote {e.vote}</Typography>
-                      </Box>
-                    ))}
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography p={1}> {e.option}</Typography>
+                      <Typography>Vote {e.vote}</Typography>
+                    </Box>
+                  ))}
+                  <Button
+                    variant="contained"
+                    onClick={()=>handleAddOption(user._id)}
+                    sx={{
+                      mr: 1,
+                      background: "#168594",
+                      fontWeight: "bold",
+                      "&:hover": {
+                        backgroundColor: "#168594",
+                      },
+                    }}
+                  >
+                    Add Option
+                  </Button>
                   {user._id === deleteId && deletedLoading ? (
                     <CircularProgress />
                   ) : (
@@ -165,9 +222,9 @@ function AdminDashBoard() {
                       onClick={() => handleDelete(user._id)}
                       sx={{
                         color: "#ffffff",
-                        fontWeight:"bold",
+                        fontWeight: "bold",
                         // background: "#f46161",
-                        background:"#FF0000",
+                        background: "#FF0000",
                         "&:hover": {
                           backgroundColor: "red",
                         },

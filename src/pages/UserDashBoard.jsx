@@ -15,6 +15,7 @@ import { AdminPollApi } from "../redux/slice/AdminPollSlice";
 import { dispatch } from "../redux/store/store";
 import { ToastContainer, toast } from "react-toastify";
 import { userVoteApi } from "../redux/slice/UserVoteSlice";
+import UserNav from "../components/UserNav";
 
 function UserDashBoard() {
   const navigate = useNavigate();
@@ -76,7 +77,7 @@ function UserDashBoard() {
           minWidth: "100vh",
         }}
       >
-        <Box
+        {/* <Box
           display={"flex"}
           sx={{ justifyContent: "space-around", color: "white" }}
         >
@@ -86,7 +87,9 @@ function UserDashBoard() {
           <Button onClick={handleLogout} sx={{ color: "white" }}>
             Logout
           </Button>
-        </Box>
+        </Box> */}
+        
+        <UserNav/>
         <Grid container spacing={5} p={5}>
           <Grid item xs={12} md={6} sm={6}>
             {column1Data.map((user) => (
@@ -159,7 +162,7 @@ function UserDashBoard() {
                         sx={{
                           display: "flex",
                           justifyContent: "space-between",
-                          mt: 2,
+                          mt: 1,
                         }}
                       >
                         <Typography>{e.option}</Typography>
@@ -172,6 +175,7 @@ function UserDashBoard() {
                         </Button>
                       </Box>
                     ))}
+                     <Box>View a poll</Box>
                   </CardContent>
                 )}
               </Card>
