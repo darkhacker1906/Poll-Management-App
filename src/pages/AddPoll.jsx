@@ -33,11 +33,32 @@ function AddPoll() {
   const { handleSubmit, resetForm, handleChange, values } = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => {
-      dispatch(addPollApi(values));
-      dispatch(addPollResetReducer());
+      try {
+        if (values.title.trim() !== "") {
+          if(values.option1.trim()!=="" && values.option2.trim()!==""){
+                 dispatch(addPollApi(values));
+              setTimeout(() => {
+                navigate("/admin");
+              }, 200);
+          }
+          else{
+            toast.warning("Please enter options", { autoClose: 1000 });
+          }
+        } else {
+          dispatch(addPollResetReducer());
+          toast.warning("Please enter title and options", { autoClose: 1000 });
+          addPollResetReducer();
+        }
+      } catch (e) {
+        console.log(e, "error");
+      }
       resetForm();
     },
   });
+
+  const handleCancel = () => {
+    navigate("/admin");
+  };
   useEffect(() => {
     if (addPollslice.isSuccess) {
       navigate("/admin");
@@ -59,13 +80,13 @@ function AddPoll() {
               onSubmit={handleSubmit}
             >
               <Typography sx={{ textAlign: "center" }} variant="h4">
-                Add Poll
+                Add Poll 
               </Typography>
               <TextField
                 variant="outlined"
                 label="Title"
                 name="title"
-                value={values.name}
+                value={values.title}
                 onChange={handleChange}
                 fullWidth
               />
@@ -73,7 +94,7 @@ function AddPoll() {
                 variant="outlined"
                 label="Option1"
                 name="option1"
-                value={values.name}
+                value={values.option1}
                 onChange={handleChange}
                 fullWidth
               />
@@ -81,7 +102,7 @@ function AddPoll() {
                 variant="outlined"
                 label="Option2"
                 name="option2"
-                value={values.name}
+                value={values.option2}
                 onChange={handleChange}
                 fullWidth
               />
@@ -92,19 +113,21 @@ function AddPoll() {
                   variant="outlined"
                   value={values.name}
                   label={`Option${index + 3}`}
-                  name={`Option${index + 3}`}
+                  name={`option${index + 3}`}
                   fullWidth
                 />
               ))}
 
               <Box>
-                <Button
-                  variant="contained"
-                  sx={{ background: "#08879C" }}
-                  onClick={addInputField}
-                >
-                  Add Option
-                </Button>
+                {rowData.length < 2 && (
+                  <Button
+                    variant="contained"
+                    sx={{ background: "#08879C" }}
+                    onClick={addInputField}
+                  >
+                    Add Option
+                  </Button>
+                )}
               </Box>
               {isLoading ? (
                 <CircularProgress />
@@ -118,7 +141,11 @@ function AddPoll() {
                 </Button>
               )}
 
-              <Button variant="contained" sx={{ background: "#08879C" }}>
+              <Button
+                variant="contained"
+                sx={{ background: "#08879C" }}
+                onClick={() => handleCancel()}
+              >
                 Cancel
               </Button>
             </Stack>
