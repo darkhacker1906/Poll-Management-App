@@ -9,6 +9,7 @@ import PrivateRoute from './PrivateRoute'
 import UserDetails from '../pages/UserDetails'
 import EditTitle from '../pages/EditTitle'
 import AddOption from '../pages/AddOption'
+import ViewPoll from '../pages/ViewPoll'
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
         <Route path='admin/userdetails' element={<UserDetails/>}/>
         <Route path='/edit/:id' element={<EditTitle/>}/>
         <Route path='/admin/addoption' element={<AddOption/>}/>
+        <Route path='/user/viewpoll' element={<ViewPoll/>}/>
       </Routes>
     </div>
   )

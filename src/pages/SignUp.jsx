@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -18,12 +18,15 @@ import {
   Stack,
 } from "@mui/material";
 import { useFormik } from "formik";
-import SignupImg from "../assets/images/SignupImg.jpeg";
 import { signupSchema } from "../schemas/Validation";
 import FormError from "../schemas/formError";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { dispatch } from "../redux/store/store";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   signUpapi,
   signupResetReducer,
@@ -35,7 +38,18 @@ import "react-toastify/dist/ReactToastify.css";
 export default function SignUp() {
   const navigate = useNavigate();
   const signupSlice = useSelector((state) => state.signup);
-  // console.log(signupSlice);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+  const handleClickConfirmPassword = () => {
+    setShowConfirmPassword((prev) => !prev);
+  };
+
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  };
   const isLoading = signupSlice.loading;
   const initialValues = {
     username: "",
@@ -54,20 +68,19 @@ export default function SignUp() {
   } = useFormik({
     initialValues: initialValues,
     validationSchema: signupSchema,
-    onSubmit: (values) => {
+    onSubmit: async(values) => {
       try {
-        dispatch(startLoading());
-        dispatch(signUpapi(values));
+       await dispatch(signUpapi(values));
       } catch (error) {
         dispatch(signupResetReducer());
       }
-      resetForm();
+      // resetForm();
     },
   });
 
   useEffect(() => {
     if (signupSlice.isError) {
-      toast.error("User already exists!",{autoClose:1000});
+      toast.error("User already exists!", { autoClose: 1000 });
       dispatch(signupResetReducer());
     } else if (signupSlice.isSuccess) {
       setTimeout(() => {
@@ -76,13 +89,13 @@ export default function SignUp() {
       toast.success("Sign up successful!", { autoClose: 1000 });
     }
     dispatch(signupResetReducer());
-  }, [signupSlice.isSuccess,signupSlice.isError]);
+  }, [signupSlice.isSuccess, signupSlice.isError]);
 
   return (
     <Box
       sx={{
         justifyContent: "center",
-        background:"linear-gradient(80deg, #D8B5FF ,  #1EAE98)",
+        background: "linear-gradient(80deg, #D8B5FF ,  #1EAE98)",
         backgroundSize: "cover",
         backgroundPosition: "center",
         objectFit: "cover",
@@ -152,11 +165,25 @@ export default function SignUp() {
                     fullWidth
                     name="password"
                     label="Password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     value={values.password.trim()}
                     onBlur={handleBlur}
                     onChange={handleChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   {errors.password && touched.password && (
                     <FormError error_msg={errors.password} />
@@ -168,11 +195,29 @@ export default function SignUp() {
                     fullWidth
                     name="confirm_password"
                     label=" Confirm Password"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     id="confirm_password"
                     value={values.confirm_password.trim()}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickConfirmPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                          >
+                            {showConfirmPassword ? (
+                              <Visibility />
+                            ) : (
+                              <VisibilityOff />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                   {errors.confirm_password && touched.confirm_password && (
                     <FormError error_msg={errors.confirm_password} />
@@ -197,9 +242,14 @@ export default function SignUp() {
                     )}
                   </FormControl>
                 </Box>
-                {isLoading ? <Box display={"flex"} sx={{justifyContent:"center",mb:2}}>
-                  <CircularProgress />
-                </Box> : (
+                {isLoading ? (
+                  <Box
+                    display={"flex"}
+                    sx={{ justifyContent: "center", mb: 2 }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
                   <Button
                     type="submit"
                     fullWidth

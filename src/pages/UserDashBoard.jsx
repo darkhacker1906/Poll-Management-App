@@ -24,17 +24,16 @@ function UserDashBoard() {
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
   const token = localStorage.getItem("token");
-  const [addId,setAddId]=useState(null);
+  const [addId, setAddId] = useState(null);
   useEffect(() => {
-    const storedDisabledOptions = JSON.parse(localStorage.getItem("disabledOptions")) || {};
+    const storedDisabledOptions =
+      JSON.parse(localStorage.getItem("disabledOptions")) || {};
     setDisabledOptions(storedDisabledOptions);
   }, []);
-  const [disabledOptions,setDisabledOptions]=useState({});
+  const [disabledOptions, setDisabledOptions] = useState({});
 
-  const handleLogout = () => {
-    alert("Logging out");
-    navigate("/");
-    localStorage.clear();
+  const handleViewPoll = () => {
+    navigate("/user/viewpoll");
   };
   const add_poll = (id, option) => {
     const header = {
@@ -44,10 +43,14 @@ function UserDashBoard() {
     };
     dispatch(userVoteApi({ id, option, header }));
     setAddId(id);
-    setDisabledOptions((prev)=>({
-      ...prev,addId:OptionIndex,
-    }));
-    localStorage.setItem("disabledOptions", JSON.stringify({ ...disabledOptions, addId: OptionIndex }));
+    // setDisabledOptions((prev) => ({
+    //   ...prev,
+    //   addId: OptionIndex,
+    // }));
+    // localStorage.setItem(
+    //   "disabledOptions",
+    //   JSON.stringify({ ...disabledOptions, addId: OptionIndex })
+    // );
   };
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -60,12 +63,13 @@ function UserDashBoard() {
   }, [adminPollData]);
 
   useEffect(() => {
-    if ( UserVoteData.isSuccess) {
-      toast.success("Vote added successfully", { autoClose: 1000 });
-    } else if (addId !== null && UserVoteData && UserVoteData.error !== 0) {
-      toast.error("Failed to add vote",{autoClose:1000});
+    if (UserVoteData.isSuccess) {
+      // toast.success("Vote added successfully", { autoClose: 1000 });
+      console.log("Hello");
+    } else if (addId !== null && UserVoteData && UserVoteData.isError !== 0) {
+      toast.error("Failed to add vote", { autoClose: 1000 });
     }
-  }, [UserVoteData.isSuccess, addId]);
+  }, [UserVoteData.isSuccess, addId,UserVoteData.isError]);
 
   return (
     <>
@@ -77,19 +81,7 @@ function UserDashBoard() {
           minWidth: "100vh",
         }}
       >
-        {/* <Box
-          display={"flex"}
-          sx={{ justifyContent: "space-around", color: "white" }}
-        >
-          <Typography variant="h5" color={"white"}>
-            User Dashboard
-          </Typography>
-          <Button onClick={handleLogout} sx={{ color: "white" }}>
-            Logout
-          </Button>
-        </Box> */}
-        
-        <UserNav/>
+        <UserNav />
         <Grid container spacing={5} p={5}>
           <Grid item xs={12} md={6} sm={6}>
             {column1Data.map((user) => (
@@ -100,17 +92,21 @@ function UserDashBoard() {
                   width: "100%",
                   borderRadius: 5,
                   marginTop: 3,
+                  opacity: 0.8,
                 }}
               >
                 {user && (
                   <CardContent>
                     <Box
                       display={"flex"}
-                      sx={{ justifyContent: "space-between" }}
+                      sx={{
+                        justifyContent: "space-between",
+                        background: "#06B9BC",
+                        p: 1,
+                      }}
                     >
                       <Typography>{user.title}</Typography>{" "}
                     </Box>
-
                     {user.options.map((e, index) => (
                       <Box
                         key={index}
@@ -118,6 +114,7 @@ function UserDashBoard() {
                           display: "flex",
                           justifyContent: "space-between",
                           mt: 1,
+                          pl: 1,
                         }}
                       >
                         <Typography>{e.option}</Typography>
@@ -130,7 +127,19 @@ function UserDashBoard() {
                         </Button>
                       </Box>
                     ))}
-                    <Box>View a poll</Box>
+                    <Box pl={1}>
+                      <Typography
+                        sx={{
+                          "&:hover": {
+                            color: "#168594",
+                            cursor: "pointer",
+                          },
+                        }}
+                        onClick={() => handleViewPoll()}
+                      >
+                        View a poll
+                      </Typography>
+                    </Box>
                   </CardContent>
                 )}
               </Card>
@@ -145,13 +154,18 @@ function UserDashBoard() {
                   width: "100%",
                   borderRadius: 5,
                   marginTop: 3,
+                  opacity: 0.8,
                 }}
               >
                 {user && (
                   <CardContent>
                     <Box
                       display={"flex"}
-                      sx={{ justifyContent: "space-between" }}
+                      sx={{
+                        justifyContent: "space-between",
+                        background: "#06B9BC",
+                        p: 1,
+                      }}
                     >
                       <Typography>{user.title}</Typography>{" "}
                     </Box>
@@ -163,11 +177,13 @@ function UserDashBoard() {
                           display: "flex",
                           justifyContent: "space-between",
                           mt: 1,
+                          pl: 1,
                         }}
                       >
                         <Typography>{e.option}</Typography>
                         <Button
                           variant="contained"
+                          // disabled=
                           sx={{ background: "#1A778A" }}
                           onClick={() => add_poll(user._id, e.option)}
                         >
@@ -175,7 +191,19 @@ function UserDashBoard() {
                         </Button>
                       </Box>
                     ))}
-                     <Box>View a poll</Box>
+                    <Box pl={1}>
+                      <Typography
+                        sx={{
+                          "&:hover": {
+                            color: "#168594",
+                            cursor: "pointer",
+                          },
+                        }}
+                        onClick={() => handleViewPoll()}
+                      >
+                        View a poll
+                      </Typography>
+                    </Box>
                   </CardContent>
                 )}
               </Card>

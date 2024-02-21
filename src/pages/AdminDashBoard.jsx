@@ -98,10 +98,11 @@ function AdminDashBoard() {
                           alignItems: "center",
                           justifyContent: "center",
                           mr: 1,
-                          fontSize: "20px",
                         }}
                       >
-                        <MdEdit onClick={() => handleEdit(user._id)} />
+                       <Typography sx={{ "&:hover": {
+                         cursor:"pointer"
+                        } }}> <MdEdit fontSize={23} onClick={() => handleEdit(user._id)} /></Typography>
                       </Box>
                     </Box>
 
@@ -186,7 +187,10 @@ function AdminDashBoard() {
                         fontSize: "20px",
                       }}
                     >
-                      <MdEdit onClick={() => handleEdit()} />
+                     <Typography sx={{ "&:hover": {
+                         cursor:"pointer",
+                        },
+                        }}><MdEdit fontSize={23} onClick={() => handleEdit(user._id)} /></Typography> 
                     </Box>
                   </Box>
                   {user.options.map((e, index) => (
