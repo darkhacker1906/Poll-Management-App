@@ -32,11 +32,11 @@ function AddPoll() {
   };
   const { handleSubmit, resetForm, handleChange, values } = useFormik({
     initialValues: initialValues,
-    onSubmit: (values) => {
+    onSubmit: async(values) => {
       try {
         if (values.title.trim() !== "") {
           if(values.option1.trim()!=="" && values.option2.trim()!==""){
-                 dispatch(addPollApi(values));
+                await dispatch(addPollApi(values));
               setTimeout(() => {
                 navigate("/admin");
               }, 200);
@@ -129,8 +129,9 @@ function AddPoll() {
                   </Button>
                 )}
               </Box>
+              
               {isLoading ? (
-                <CircularProgress />
+                <Box sx={{display:"flex", justifyContent:"center"}}><CircularProgress /></Box>
               ) : (
                 <Button
                   variant="contained"

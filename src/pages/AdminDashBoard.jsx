@@ -18,6 +18,9 @@ import { ToastContainer, toast } from "react-toastify";
 import { DeletePollApi } from "../redux/slice/DeletePollSlice";
 import Navbar from "../components/Navbar";
 import { MdEdit } from "react-icons/md";
+import EditTitle from "./EditTitle";
+import DeleteModal from "../components/DeleteModal";
+import EditModal from "../components/EditModal";
 
 function AdminDashBoard() {
   const navigate = useNavigate();
@@ -25,22 +28,41 @@ function AdminDashBoard() {
   const adminPollData = useSelector((state) => state.adminPoll.data);
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
+  const deleteData=useSelector((state)=>state.deletePoll);
   const deletedLoading = useSelector((state) => state.deletePoll.loading);
+  const [open, setOpen] = useState(false);
+  const [editOpen,setEditOpen]=useState(false);
+  const [editId,setEditId]=useState(null);
 
-  const handleDelete = (id) => {
-    dispatch(DeletePollApi(id));
+  const handleDelete =async (id) => {
+    setOpen(true);
     setDeleteId(id);
-    toast.success("Poll  deleted successfully!", { autoClose: 1000 });
   };
-  const handleEdit = (titleID) => {
-    const selectedPoll = adminPollData.find((poll) => poll._id === titleID);
+  const handleClose=()=>{
+    setOpen(false);
+  }
+  const handleEditClose=()=>{
+    setEditOpen(false);
+  }
+  const handleEdit =async (id) => {
+    const selectedPoll = adminPollData.find((poll) => poll._id === id);
     if (selectedPoll) {
-      navigate(`/edit/${titleID}`, { state: { pollData: selectedPoll } });
+      setEditId(id)
+      // navigate(`/edit/${titleID}`, { state: { pollData: selectedPoll } });
+      setEditOpen(true);
     }
   };
   const handleAddOption=(id)=>{
     navigate("/admin/addoption", { state: { id: id } })
   }
+  useEffect(()=>{
+     if(deleteData && deleteData.isSuccess){
+       toast.success("Poll  deleted successfully!", { autoClose: 1000 });
+     }
+     else if(deleteData && deleteData.isError){
+      toast.error("Poll not  deleted successfully!", { autoClose: 1000 });
+     }
+  },[deleteData.isSuccess,deleteData.isError])
 
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -140,7 +162,6 @@ function AdminDashBoard() {
                         sx={{
                           color: "#ffffff",
                           fontWeight: "bold",
-                          // background: "#f46161",
                           background: "#FF0000",
                           "&:hover": {
                             backgroundColor: "red",
@@ -227,7 +248,6 @@ function AdminDashBoard() {
                       sx={{
                         color: "#ffffff",
                         fontWeight: "bold",
-                        // background: "#f46161",
                         background: "#FF0000",
                         "&:hover": {
                           backgroundColor: "red",
@@ -245,6 +265,8 @@ function AdminDashBoard() {
         </Grid>
       </Stack>
       <ToastContainer />
+    <DeleteModal open={open} deleteId={deleteId} handleClose={handleClose}/>
+    <EditModal editOpen={editOpen} handleEditClose={handleEditClose} editId={editId} />
     </>
   );
 }

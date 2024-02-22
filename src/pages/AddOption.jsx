@@ -85,7 +85,7 @@ const AddOption = () => {
                 textAlign: "center",
               }}
             >
-              Update Option Here
+              Add Option Here
             </Typography>
             <TextField
               label={"Option"}
