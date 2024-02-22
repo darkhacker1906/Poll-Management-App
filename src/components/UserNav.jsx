@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
+function UserNav() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -20,12 +20,6 @@ function Navbar() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
-  const handleAddPoll=()=>{
-    navigate("/admin/addpoll")
-  }
-  const handleUserDetails=()=>{
-    navigate("/admin/userdetails")
-  }
   const handleLogout = () => {
     alert("Logging out");
     navigate("/");
@@ -51,7 +45,7 @@ function Navbar() {
               justifyContent:"flex-end"
             }}
           >
-            Admin Dashboard
+            User Dashboard
           </Typography>
 
           <Box sx={{ flexGrow: 0 ,width:"38%",display:"flex",justifyContent:"flex-end",pr:3}}>
@@ -76,8 +70,6 @@ function Navbar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              <MenuItem onClick={handleAddPoll}>Add Poll</MenuItem>
-              <MenuItem onClick={handleUserDetails}>User Details</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </Box>
@@ -86,4 +78,4 @@ function Navbar() {
     </AppBar>
   );
 }
-export default Navbar;
+export default UserNav;

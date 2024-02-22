@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -22,11 +22,24 @@ import {
 import { useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import { ToastContainer, toast } from "react-toastify";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+
 
 export default function SignIn() {
   const signinSlice = useSelector((state) => state.signin);
   const isLoading = signinSlice.loading;
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
+  
+  const handleMouseDownPassword = (e) => {
+    e.preventDefault();
+  };  
 
   const initialValues = {
     username: "",
@@ -43,10 +56,9 @@ export default function SignIn() {
   } = useFormik({
     initialValues: initialValues,
     validationSchema: signinSchema,
-    onSubmit: (values) => {
+    onSubmit:async(values) => {
       try {
-        dispatch(startLoading());
-        dispatch(signInApi(values));
+       await dispatch(signInApi(values));
       } catch (error) {
         dispatch(loginResetReducer());
       }
@@ -129,7 +141,7 @@ export default function SignIn() {
                 <LockOutlinedIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign in4567yuio
+                Sign in
               </Typography>
               <Box
                 component="form"
@@ -155,11 +167,25 @@ export default function SignIn() {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   value={values.password.trim()}
                   onChange={handleChange}
                   onBlur={handleBlur}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {errors.password && touched.password && (
                   <FormError error_msg={errors.password} />

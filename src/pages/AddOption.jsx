@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -9,54 +9,50 @@ import {
 } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import { useFormik } from "formik";
-import { Link, useNavigate, useLocation, NavLink } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { EditPollApi, resetReducer } from "../redux/slice/TitleEditSlice";
+import { useNavigate, useLocation, NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AddOptionApi } from "../redux/slice/AddOptionSlice";
+import { addPollResetReducer } from "../redux/slice/AddPollSlice";
 
-const EditPoll = () => {
+const AddOption = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
-
-
+  const addOptiondata = useSelector((state) => state.addOption);
+  const isLoading = addOptiondata.loading;
+  console.log(addOptiondata);
   useEffect(() => {
-    if (location.state && location.state.pollData) {
-      const title = location.state.pollData.title;
-      formik.setValues({ title });
+    if (addOptiondata && addOptiondata.isSuccess) {
+      toast.success("Option added successfully", { autoClose: 1000 });
+    } else if (addOptiondata && addOptiondata.isError) {
+      toast.success("Option not added successfully", { autoClose: 1000 });
     }
-  }, [location.state]);
-  const formik = useFormik({
-    initialValues: {
-      title: location.state,
+  }, [addOptiondata.isSuccess]);
+
+  const initialValues = {
+    option: "",
+    id: location.state.id,
+  };
+  const { values, handleChange, handleSubmit, resetForm } = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values) => {
+      const id = values.id;
+      const option = values.option.trim();
+      if (option) {
+        const data = { id, option };
+        dispatch(AddOptionApi(data));
+        setTimeout(() => {
+          navigate("/admin");
+        }, 200);
+      } else {
+        toast.error("Please enter option value", { autoClose: 1000 });
+        dispatch(addPollResetReducer());
+      }
+      dispatch(addPollResetReducer());
+      resetForm();
     },
-    onSubmit:async(values)=>{
-     try{
-        const trimmedTitle = values.title.trim();
-        if(values.title.trim !== ""){
-           if (location.state && location.state.pollData) {
-            const id=location.state.pollData._id;
-            const updatedData=trimmedTitle;
-            setIsLoading(true);
-            const updatedPoll = await dispatch(EditPollApi(id,updatedData));
-            console.log(updatedPoll,"updated data");
-            setIsLoading(false);
-            toast.success("Poll updated successfully");
-            setTimeout(() => {
-              navigate("/admin");
-            }, 200);
-           }
-           else{
-            dispatch(resetReducer());
-            toast.warning("Please enter  title");
-           }
-        }
-     }catch(error){
-         console.error("Error:", error);
-         setIsLoading(false);
-     } 
-    }
   });
+
   return (
     <Box
       sx={{
@@ -76,7 +72,7 @@ const EditPoll = () => {
           borderRadius: 3,
         }}
       >
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Stack direction={"column"} spacing={2} className="form_container">
             <Typography
               variant="h4"
@@ -89,13 +85,13 @@ const EditPoll = () => {
                 textAlign: "center",
               }}
             >
-              Update title Here
+              Update Option Here
             </Typography>
             <TextField
-              label={"Title"}
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
+              label={"Option"}
+              name="option"
+              value={values.title}
+              onChange={handleChange}
             />
             {isLoading ? (
               <CircularProgress color="primary" />
@@ -137,4 +133,4 @@ const EditPoll = () => {
   );
 };
 
-export default EditPoll;
+export default AddOption;
