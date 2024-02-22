@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { dispatch } from "../redux/store/store";
 import { DeletePollApi } from "../redux/slice/DeletePollSlice";
+import { useSelector } from "react-redux";
+import { CircularProgress } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -20,9 +22,10 @@ const style = {
 };
 
 export default function DeleteModal({ open,deleteId,handleClose}) {
+  const isloading=useSelector((state)=>state.deletePoll.loading);
  const  handleDelete= async(id)=>{
+  await dispatch(DeletePollApi(id));
       handleClose();
-     await dispatch(DeletePollApi(id));
   }
   return (
     <div>
@@ -38,7 +41,10 @@ export default function DeleteModal({ open,deleteId,handleClose}) {
           </Typography>
           <Box sx={{ mr: 2, mt: 2, display:"flex",justifyContent:"center"}}>
             {" "}
-            <Button variant="contained" onClick={()=>handleDelete(deleteId)} sx={{background:"red",fontWeight:"bold"}}>Delete</Button>{" "}
+            {
+              isloading?<CircularProgress/>:<Button variant="contained" onClick={()=>handleDelete(deleteId)} sx={{background:"red",fontWeight:"bold"}}>Confirm</Button>
+            }
+            
             <Button variant="contained" onClick={()=>handleClose()} sx={{ml:2,background:"#148E9B",fontWeight:"bold"}}>Cancel</Button>
           </Box>
         </Box>

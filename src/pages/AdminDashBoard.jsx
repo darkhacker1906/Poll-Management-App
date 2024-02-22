@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardContent,
-  CircularProgress,
   Grid,
   Stack,
   Typography,
@@ -15,12 +14,16 @@ import { AdminPollApi } from "../redux/slice/AdminPollSlice";
 import { dispatch } from "../redux/store/store";
 import { MdDelete } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
-import { DeletePollApi } from "../redux/slice/DeletePollSlice";
 import Navbar from "../components/Navbar";
 import { MdEdit } from "react-icons/md";
-import EditTitle from "./EditTitle";
 import DeleteModal from "../components/DeleteModal";
 import EditModal from "../components/EditModal";
+
+import { resetReducer } from "../redux/slice/TitleEditSlice";
+import { addPollResetReducer } from "../redux/slice/AddPollSlice";
+import { deleteResetReducer } from "../redux/slice/DeletePollSlice";
+import AddOptionModal from "../components/AddOptionModal";
+import { addOptionResetReducer } from "../redux/slice/AddOptionSlice";
 
 function AdminDashBoard() {
   const navigate = useNavigate();
@@ -28,45 +31,88 @@ function AdminDashBoard() {
   const adminPollData = useSelector((state) => state.adminPoll.data);
   const [column1Data, setColumn1Data] = useState([]);
   const [column2Data, setColumn2Data] = useState([]);
-  const deleteData=useSelector((state)=>state.deletePoll);
-  const deletedLoading = useSelector((state) => state.deletePoll.loading);
+  const deleteData = useSelector((state) => state.deletePoll);
   const [open, setOpen] = useState(false);
-  const [editOpen,setEditOpen]=useState(false);
-  const [editId,setEditId]=useState(null);
+  const [editOpen, setEditOpen] = useState(false);
+  const [addOptionOpen,setAddOptionOpen]=useState(false);
+  const [editId, setEditId] = useState(null);
+  const [title, setTitle] = useState("");
+  const [addOptionId,setAddOptionId]=useState(null);
+  const editdata = useSelector((state) => state.editPoll);
+  const addPollData = useSelector((state) => state.addPoll);
+  const addOptionData=useSelector((state)=>state.addOption);
 
-  const handleDelete =async (id) => {
-    setOpen(true);
+  const handleDelete = async (id) => {
+    const selectedPoll=adminPollData.find((poll)=>poll._id===id);
+    if(selectedPoll){
+      setOpen(true);
     setDeleteId(id);
+    }
   };
-  const handleClose=()=>{
+  const handleClose = () => {
     setOpen(false);
-  }
-  const handleEditClose=()=>{
+  };
+  const handleEditClose = () => {
     setEditOpen(false);
-  }
-  const handleEdit =async (id) => {
+  };
+  const handleEdit = async (id) => {
     const selectedPoll = adminPollData.find((poll) => poll._id === id);
     if (selectedPoll) {
-      setEditId(id)
-      // navigate(`/edit/${titleID}`, { state: { pollData: selectedPoll } });
+      setEditId(id);
+      setTitle(selectedPoll.title);
       setEditOpen(true);
     }
   };
-  const handleAddOption=(id)=>{
-    navigate("/admin/addoption", { state: { id: id } })
+  const handleAddOption = (id) => {
+    setAddOptionId(id);
+    setAddOptionOpen(true);
+  };
+  const handleAddOptionClose=()=>{
+    setAddOptionOpen(false);
   }
-  useEffect(()=>{
-     if(deleteData && deleteData.isSuccess){
-       toast.success("Poll  deleted successfully!", { autoClose: 1000 });
-     }
-     else if(deleteData && deleteData.isError){
-      toast.error("Poll not  deleted successfully!", { autoClose: 1000 });
-     }
-  },[deleteData.isSuccess,deleteData.isError])
+  useEffect(() => {
+    if (addPollData && addPollData.isSuccess) {
+      toast.success("Poll added successfully", { autoClose: 1000 });
+      dispatch(addPollResetReducer());
+    } else if (addPollData && addPollData.isError) {
+      toast.error("Poll not added successfully", { autoClose: 1000 });
+      dispatch(addPollResetReducer());
+    } else if (deleteData && deleteData.isSuccess) {
+      console.log("delete");
+      toast.success("Poll  deleted successfully", { autoClose: 1000 });
+      dispatch(deleteResetReducer());
+    } else if (deleteData && deleteData.isError) {
+      toast.error("Poll not  deleted successfully", { autoClose: 1000 });
+      dispatch(deleteResetReducer());
+    } else if (editdata && editdata.isSuccess) {
+      toast.success("Title edited successfully", { autoClose: 1000 });
+      dispatch(resetReducer());
+    } else if (editdata && editdata.isError) {
+      toast.error("Poll not  edited successfully", { autoClose: 1000 });
+      dispatch(resetReducer());
+    }
+    else if(addOptionData && addOptionData.isSuccess){
+      toast.success("Option added successfully",{autoClose:1000});
+      dispatch(addOptionResetReducer());
+    }
+    else if(addOptionData && addOptionData.isError){
+      toast.error("Option not added successfully",{autoClose:1000});
+      dispatch(addOptionResetReducer());
+    }
+  }, [
+    deleteData.isSuccess,
+    deleteData.isError,
+    editdata.isSuccess,
+    editdata.isError,
+    addPollData.isError,
+    addPollData.isSuccess,
+    addOptionData.isSuccess,
+    addOptionData.isError
+  ]);
 
   useEffect(() => {
     dispatch(AdminPollApi());
-  }, [dispatch, deleteId, deletedLoading]);
+  }, [ deleteId, deleteData.isSuccess, editId, editdata.isSuccess,addOptionId,addOptionData.isSuccess]);
 
   useEffect(() => {
     const halfData = Math.ceil(adminPollData.length / 2);
@@ -122,9 +168,19 @@ function AdminDashBoard() {
                           mr: 1,
                         }}
                       >
-                       <Typography sx={{ "&:hover": {
-                         cursor:"pointer"
-                        } }}> <MdEdit fontSize={23} onClick={() => handleEdit(user._id)} /></Typography>
+                        <Typography
+                          sx={{
+                            "&:hover": {
+                              cursor: "pointer",
+                            },
+                          }}
+                        >
+                          {" "}
+                          <MdEdit
+                            fontSize={23}
+                            onClick={() => handleEdit(user._id)}
+                          />
+                        </Typography>
                       </Box>
                     </Box>
 
@@ -142,7 +198,7 @@ function AdminDashBoard() {
                     ))}
                     <Button
                       variant="contained"
-                      onClick={()=>handleAddOption(user._id)}
+                      onClick={() => handleAddOption(user._id)}
                       sx={{
                         mr: 1,
                         background: "#168594",
@@ -154,24 +210,20 @@ function AdminDashBoard() {
                     >
                       Add Option
                     </Button>
-                    {user._id === deleteId && deletedLoading ? (
-                      <CircularProgress />
-                    ) : (
-                      <Button
-                        onClick={() => handleDelete(user._id)}
-                        sx={{
-                          color: "#ffffff",
-                          fontWeight: "bold",
-                          background: "#FF0000",
-                          "&:hover": {
-                            backgroundColor: "red",
-                          },
-                        }}
-                      >
-                        Delete
-                        <MdDelete fontSize={25} />
-                      </Button>
-                    )}
+                    <Button
+                      onClick={() => handleDelete(user._id)}
+                      sx={{
+                        color: "#ffffff",
+                        fontWeight: "bold",
+                        background: "#FF0000",
+                        "&:hover": {
+                          backgroundColor: "red",
+                        },
+                      }}
+                    >
+                      Delete
+                      <MdDelete fontSize={25} />
+                    </Button>
                   </CardContent>
                 )}
               </Card>
@@ -208,10 +260,18 @@ function AdminDashBoard() {
                         fontSize: "20px",
                       }}
                     >
-                     <Typography sx={{ "&:hover": {
-                         cursor:"pointer",
-                        },
-                        }}><MdEdit fontSize={23} onClick={() => handleEdit(user._id)} /></Typography> 
+                      <Typography
+                        sx={{
+                          "&:hover": {
+                            cursor: "pointer",
+                          },
+                        }}
+                      >
+                        <MdEdit
+                          fontSize={23}
+                          onClick={() => handleEdit(user._id)}
+                        />
+                      </Typography>
                     </Box>
                   </Box>
                   {user.options.map((e, index) => (
@@ -228,7 +288,7 @@ function AdminDashBoard() {
                   ))}
                   <Button
                     variant="contained"
-                    onClick={()=>handleAddOption(user._id)}
+                    onClick={() => handleAddOption(user._id)}
                     sx={{
                       mr: 1,
                       background: "#168594",
@@ -240,24 +300,20 @@ function AdminDashBoard() {
                   >
                     Add Option
                   </Button>
-                  {user._id === deleteId && deletedLoading ? (
-                    <CircularProgress />
-                  ) : (
-                    <Button
-                      onClick={() => handleDelete(user._id)}
-                      sx={{
-                        color: "#ffffff",
-                        fontWeight: "bold",
-                        background: "#FF0000",
-                        "&:hover": {
-                          backgroundColor: "red",
-                        },
-                      }}
-                    >
-                      Delete
-                      <MdDelete fontSize={25} />
-                    </Button>
-                  )}
+                  <Button
+                    onClick={() => handleDelete(user._id)}
+                    sx={{
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      background: "#FF0000",
+                      "&:hover": {
+                        backgroundColor: "red",
+                      },
+                    }}
+                  >
+                    Delete
+                    <MdDelete fontSize={25} />
+                  </Button>
                 </CardContent>
               </Card>
             ))}
@@ -265,8 +321,14 @@ function AdminDashBoard() {
         </Grid>
       </Stack>
       <ToastContainer />
-    <DeleteModal open={open} deleteId={deleteId} handleClose={handleClose}/>
-    <EditModal editOpen={editOpen} handleEditClose={handleEditClose} editId={editId} />
+      <DeleteModal open={open} deleteId={deleteId} handleClose={handleClose} />
+      <EditModal
+        editOpen={editOpen}
+        handleEditClose={handleEditClose}
+        editId={editId}
+        title={title}
+      />
+      <AddOptionModal handleAddOptionClose={handleAddOptionClose} addOptionOpen={addOptionOpen} addOptionId={addOptionId}/>
     </>
   );
 }

@@ -28,7 +28,7 @@ const DeletePoll = createSlice({
       state.isSuccess = false;
       state.data = action.payload;
     },
-    resetReducer(state) {
+    deleteResetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
@@ -41,14 +41,13 @@ export const DeletePollApi = (payload) => async () => {
   dispatch(DeletePoll.actions.startLoading());
   try {
     let response = await Instance.delete(`delete_poll?id=${payload}`);
-    console.log(response);
     dispatch(DeletePoll.actions.loginSuccessful(response.data));
   } catch (e) {
     dispatch(DeletePoll.actions.hasError(e));
   }
 };
 
-export const { startLoading, loginSuccessful, hasError, resetReducer } =
+export const { startLoading, loginSuccessful, hasError, deleteResetReducer } =
   DeletePoll.actions;
 
 export default DeletePoll.reducer;

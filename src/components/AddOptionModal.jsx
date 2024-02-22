@@ -6,7 +6,8 @@ import Modal from "@mui/material/Modal";
 import { dispatch } from "../redux/store/store";
 import { CircularProgress, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { EditPollApi } from "../redux/slice/TitleEditSlice";
+import { AddOptionApi } from "../redux/slice/AddOptionSlice";
+import { NavLink } from "react-router-dom";
 
 const style = {
   position: "absolute",
@@ -20,66 +21,45 @@ const style = {
   p: 4,
 };
 
-export default function EditModal({ editOpen,handleEditClose,editId,title}) {
+export default function AddOptionModal({
+  addOptionOpen,
+  handleAddOptionClose,
+  addOptionId
+}) {
   const [isLoading, setIsLoading] = React.useState(false);
-//  const  handleModalEdit= async(editId)=>{
-//       handleEditClose();
-//     //  await dispatch(DeletePollApi(id));
-//   }
-const formik = useFormik({
-  initialValues: {
-    title:title,
-  },
-  onSubmit:async(values)=>{
-   try{
-      const trimmedTitle = values.title.trim();
-      if(values.title.trim()!== ""){
-         if (title) {
-          const id=editId;
-          const updatedData=trimmedTitle;
-          setIsLoading(true);
-           await dispatch(EditPollApi(id,updatedData));
-          setIsLoading(false);
-          setTimeout(() => {
-            handleEditClose();
-          }, 200);
-         }
-         else{
-          dispatch(resetReducer());
-          toast.warning("Please enter  title");
-         }
+  const initialValues = {
+    option: "",
+  };
+  const { values, handleChange, handleSubmit, resetForm } = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values) => {
+      const id = addOptionId;
+      const option = values.option.trim();
+      if (option) {
+        const data = { id, option };
+        dispatch(AddOptionApi(data));
+        setTimeout(() => {
+         handleAddOptionClose();
+        }, 200);
+      } else {
+        toast.error("Please enter option value", { autoClose: 1000 });
+        dispatch(addPollResetReducer());
       }
-   }catch(error){
-       console.error("Error:", error);
-       setIsLoading(false);
-   } 
-  }
-});
-React.useEffect(() => {
-  formik.setValues((prevValues) => ({
-    ...prevValues,
-    title: title || '', 
-  }));
-}, [title]); 
+      dispatch(addPollResetReducer());
+      resetForm();
+    },
+  });
 
   return (
     <div>
       <Modal
-        open={editOpen}
-        onClose={handleEditClose}
+        open={addOptionOpen}
+        onClose={handleAddOptionClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          {/* <Typography id="modal-modal-title" variant="h6" component="h2">
-            Do you want to edit this poll?
-          </Typography>
-          <Box sx={{ mr: 2, mt: 2 }}>
-            {" "}
-            <Button variant="contained" onClick={()=>handleModalEdit(editId)} sx={{background:"red",fontWeight:"bold"}}>Edit</Button>{" "}
-            <Button variant="contained" onClick={()=>handleEditClose()} sx={{ml:2,background:"#148E9B",fontWeight:"bold"}}>Cancel</Button>
-          </Box> */}
-           <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Stack direction={"column"} spacing={2} className="form_container">
             <Typography
               variant="h4"
@@ -92,16 +72,16 @@ React.useEffect(() => {
                 textAlign: "center",
               }}
             >
-              Update title Here
+              Add Option Here
             </Typography>
             <TextField
-              label={"Title"}
-              name="title"
-              value={formik.values.title}
-              onChange={formik.handleChange}
+              label={"Option"}
+              name="option"
+              value={values.title}
+              onChange={handleChange}
             />
             {isLoading ? (
-              <Box sx={{display:'flex',justifyContent:'center'}}><CircularProgress color="primary" /></Box>
+              <CircularProgress color="primary" />
             ) : (
               <Button
                 type="submit"
@@ -126,8 +106,8 @@ React.useEffect(() => {
                   },
                   width: "100%",
                 }}
-                onClick={()=>handleEditClose()}
                 variant="contained"
+                onClick={()=>handleAddOptionClose()}
               >
                 Cancel
               </Button>
