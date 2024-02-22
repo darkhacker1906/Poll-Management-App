@@ -4,6 +4,7 @@ import {
   Card,
   CardContent,
   CircularProgress,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -15,6 +16,7 @@ import { dispatch } from "../redux/store/store";
 import { useSelector } from "react-redux";
 import { addPollApi, addPollResetReducer } from "../redux/slice/AddPollSlice";
 import { ToastContainer, toast } from "react-toastify";
+import CloseIcon from "@mui/icons-material/Close";
 
 function AddPoll() {
   const navigate = useNavigate();
@@ -32,16 +34,15 @@ function AddPoll() {
   };
   const { handleSubmit, resetForm, handleChange, values } = useFormik({
     initialValues: initialValues,
-    onSubmit: async(values) => {
+    onSubmit: async (values) => {
       try {
         if (values.title.trim() !== "") {
-          if(values.option1.trim()!=="" && values.option2.trim()!==""){
-                await dispatch(addPollApi(values));
-              setTimeout(() => {
-                navigate("/admin");
-              }, 200);
-          }
-          else{
+          if (values.option1.trim() !== "" && values.option2.trim() !== "") {
+            await dispatch(addPollApi(values));
+            setTimeout(() => {
+              navigate("/admin");
+            }, 200);
+          } else {
             toast.warning("Please enter options", { autoClose: 1000 });
           }
         } else {
@@ -80,7 +81,7 @@ function AddPoll() {
               onSubmit={handleSubmit}
             >
               <Typography sx={{ textAlign: "center" }} variant="h4">
-                Add Poll 
+                Add Poll
               </Typography>
               <TextField
                 variant="outlined"
@@ -88,14 +89,15 @@ function AddPoll() {
                 name="title"
                 value={values.title}
                 onChange={handleChange}
-                fullWidth
               />
+             
               <TextField
                 variant="outlined"
                 label="Option1"
                 name="option1"
                 value={values.option1}
                 onChange={handleChange}
+                sx={{width:'450px'}}
                 fullWidth
               />
               <TextField
@@ -105,17 +107,24 @@ function AddPoll() {
                 value={values.option2}
                 onChange={handleChange}
                 fullWidth
+                sx={{width:'450px'}}
               />
               {rowData.map((data, index) => (
-                <TextField
-                  key={index}
-                  onChange={handleChange}
-                  variant="outlined"
-                  value={values.name}
-                  label={`Option${index + 3}`}
-                  name={`option${index + 3}`}
-                  fullWidth
-                />
+                <Box sx={{display:"flex" , width:'450px'}}>
+                  <TextField
+                    key={index}
+                    onChange={handleChange}
+                    variant="outlined"
+                    value={values.name}
+                    label={`Option${index + 3}`}
+                    name={`option${index + 3}`}
+                    fullWidth
+                  />
+                  <IconButton onClick={() => handleRemoveOption(index)}>
+                    {" "}
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
               ))}
 
               <Box>
@@ -129,9 +138,11 @@ function AddPoll() {
                   </Button>
                 )}
               </Box>
-              
+
               {isLoading ? (
-                <Box sx={{display:"flex", justifyContent:"center"}}><CircularProgress /></Box>
+                <Box sx={{ display: "flex", justifyContent: "center" }}>
+                  <CircularProgress />
+                </Box>
               ) : (
                 <Button
                   variant="contained"
