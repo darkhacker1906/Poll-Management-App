@@ -199,6 +199,7 @@ function AdminDashBoard() {
                     <Button
                       variant="contained"
                       onClick={() => handleAddOption(user._id)}
+                      disabled={user.options.length >= 4} 
                       sx={{
                         mr: 1,
                         background: "#168594",
@@ -289,6 +290,7 @@ function AdminDashBoard() {
                   <Button
                     variant="contained"
                     onClick={() => handleAddOption(user._id)}
+                    disabled={user.options.length >= 4}
                     sx={{
                       mr: 1,
                       background: "#168594",

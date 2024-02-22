@@ -6,8 +6,8 @@ import Modal from "@mui/material/Modal";
 import { dispatch } from "../redux/store/store";
 import { CircularProgress, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { AddOptionApi } from "../redux/slice/AddOptionSlice";
-import { NavLink } from "react-router-dom";
+import { AddOptionApi, addOptionResetReducer } from "../redux/slice/AddOptionSlice";
+import { useSelector } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -26,7 +26,7 @@ export default function AddOptionModal({
   handleAddOptionClose,
   addOptionId
 }) {
-  const [isLoading, setIsLoading] = React.useState(false);
+ const isLoading=useSelector((state)=>state.addOption.loading);
   const initialValues = {
     option: "",
   };
@@ -43,9 +43,9 @@ export default function AddOptionModal({
         }, 200);
       } else {
         toast.error("Please enter option value", { autoClose: 1000 });
-        dispatch(addPollResetReducer());
+        dispatch(addOptionResetReducer());
       }
-      dispatch(addPollResetReducer());
+      dispatch(addOptionResetReducer());
       resetForm();
     },
   });
@@ -81,7 +81,7 @@ export default function AddOptionModal({
               onChange={handleChange}
             />
             {isLoading ? (
-              <CircularProgress color="primary" />
+              <Box display={"flex"} sx={{justifyContent:"center"}}><CircularProgress color="primary" /></Box>
             ) : (
               <Button
                 type="submit"
