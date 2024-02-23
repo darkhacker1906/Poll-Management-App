@@ -24,15 +24,18 @@ function AddPoll() {
   const isLoading = addPollslice.loading;
   const initialValues = {
     title: "",
-    option1: "",
-    option2: "",
   };
   const [rowData, setRowData] = useState([]);
   const addInputField = () => {
     const data = [...rowData, ""];
     setRowData(data);
   };
-  const { handleSubmit, resetForm, handleChange, values } = useFormik({
+  const handleRemoveOption = (index) => {
+    const updatedData = [...rowData];
+    updatedData.splice(index, 1);
+    setRowData(updatedData);
+  };
+  const { handleSubmit, resetForm, handleChange, values,errors,touched,handleBlur} = useFormik({
     initialValues: initialValues,
     onSubmit: async (values) => {
       try {
@@ -83,34 +86,44 @@ function AddPoll() {
               <Typography sx={{ textAlign: "center" }} variant="h4">
                 Add Poll
               </Typography>
-              <TextField
-                variant="outlined"
-                label="Title"
-                name="title"
-                value={values.title}
-                onChange={handleChange}
-              />
-             
-              <TextField
-                variant="outlined"
-                label="Option1"
-                name="option1"
-                value={values.option1}
-                onChange={handleChange}
-                sx={{width:'450px'}}
-                fullWidth
-              />
-              <TextField
-                variant="outlined"
-                label="Option2"
-                name="option2"
-                value={values.option2}
-                onChange={handleChange}
-                fullWidth
-                sx={{width:'450px'}}
-              />
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Title"
+                  name="title"
+                  value={values.title}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  sx={{ width: "410px" }}
+                />
+              </Box>
+              {errors.title && errors.touched  && (
+                  <FormError error_msg={errors.title} />
+                )}
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Option1"
+                  name="option1"
+                  value={values.option1}
+                  onChange={handleChange}
+                  sx={{ width: "410px" }}
+                />
+              </Box>
+
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Option2"
+                  name="option2"
+                  value={values.option2}
+                  onChange={handleChange}
+                  sx={{ width: "410px" }}
+                />
+              </Box>
+
               {rowData.map((data, index) => (
-                <Box sx={{display:"flex" , width:'450px'}}>
+                <Box sx={{ display: "flex", width: "450px" }}>
                   <TextField
                     key={index}
                     onChange={handleChange}

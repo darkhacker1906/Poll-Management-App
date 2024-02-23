@@ -130,221 +130,6 @@ function AdminDashBoard() {
   const currentItems = reversedPollList.slice(startIndex, endIndex);
 
   return (
-    // <>
-    //   <Stack
-    //     sx={{
-    //       background:
-    //         "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
-    //       minHeight: "100vh",
-    //       minWidth: "100vh",
-    //     }}
-    //   >
-    //     <Box
-    //       display={"flex"}
-    //       sx={{ justifyContent: "space-around", color: "white" }}
-    //     >
-    //       <Navbar />
-    //     </Box>
-    //     <Grid container spacing={5} p={5}>
-    //       <Grid item xs={12} md={6} sm={6}>
-    //         {column1Data.map((user) => (
-    //           <Card
-    //             key={user._id}
-    //             sx={{
-    //               minWidth: 300,
-    //               width: "100%",
-    //               borderRadius: 5,
-    //               marginTop: 3,
-    //               pt: 2,
-    //               opacity: 0.8,
-    //               "&:hover": {
-    //                 boxShadow: "15px 15px 15px teal",
-    //               },
-    //             }}
-    //           >
-    //             {user && (
-    //               <CardContent>
-    //                 <Box
-    //                   display={"flex"}
-    //                   sx={{
-    //                     justifyContent: "space-between",
-    //                     background: "#08B3B7",
-    //                   }}
-    //                 >
-    //                   <Typography p={1}>{user.title}</Typography>{" "}
-    //                   <Box
-    //                     sx={{
-    //                       display: "flex",
-    //                       alignItems: "center",
-    //                       justifyContent: "center",
-    //                       mr: 1,
-    //                     }}
-    //                   >
-    //                     <Typography
-    //                       sx={{
-    //                         "&:hover": {
-    //                           cursor: "pointer",
-    //                         },
-    //                       }}
-    //                     >
-    //                       {" "}
-    //                       <MdEdit
-    //                         fontSize={23}
-    //                         onClick={() => handleEdit(user._id)}
-    //                       />
-    //                     </Typography>
-    //                   </Box>
-    //                 </Box>
-
-    //                 {user.options.map((e, index) => (
-    //                   <Box
-    //                     key={index}
-    //                     sx={{
-    //                       display: "flex",
-    //                       justifyContent: "space-between",
-    //                     }}
-    //                   >
-    //                     <Typography p={1}>{e.option}</Typography>
-    //                     <Typography>Vote {e.vote}</Typography>
-    //                   </Box>
-    //                 ))}
-    //                 <Button
-    //                   variant="contained"
-    //                   onClick={() => handleAddOption(user._id)}
-    //                   disabled={user.options.length >= 4}
-    //                   sx={{
-    //                     mr: 1,
-    //                     background: "#168594",
-    //                     fontWeight: "bold",
-    //                     "&:hover": {
-    //                       backgroundColor: "#168594",
-    //                     },
-    //                   }}
-    //                 >
-    //                   Add Option
-    //                 </Button>
-    //                 <Button
-    //                   onClick={() => handleDelete(user._id)}
-    //                   sx={{
-    //                     color: "#ffffff",
-    //                     fontWeight: "bold",
-    //                     background: "#FF0000",
-    //                     "&:hover": {
-    //                       backgroundColor: "red",
-    //                     },
-    //                   }}
-    //                 >
-    //                   <MdDelete fontSize={25} />
-    //                 </Button>
-    //               </CardContent>
-    //             )}
-    //           </Card>
-    //         ))}
-    //       </Grid>
-    //       <Grid item xs={12} sm={6} md={6}>
-    //         {column2Data.map((user) => (
-    //           <Card
-    //             key={user._id}
-    //             sx={{
-    //               minWidth: 200,
-    //               width: "100%",
-    //               borderRadius: 5,
-    //               marginTop: 3,
-    //               pt: 2,
-    //               opacity: 0.8,
-    //               "&:hover": {
-    //                 boxShadow: "15px 15px 15px teal",
-    //               },
-    //             }}
-    //           >
-    //             <CardContent>
-    //               <Box
-    //                 display={"flex"}
-    //                 sx={{
-    //                   justifyContent: "space-between",
-    //                   background: "#08B3B7",
-    //                 }}
-    //               >
-    //                 <Typography sx={{ p: 1 }}>{user.title}</Typography>{" "}
-    //                 <Box
-    //                   sx={{
-    //                     display: "flex",
-    //                     alignItems: "center",
-    //                     justifyContent: "center",
-    //                     mr: 1,
-    //                     fontSize: "20px",
-    //                   }}
-    //                 >
-    //                   <Typography
-    //                     sx={{
-    //                       "&:hover": {
-    //                         cursor: "pointer",
-    //                       },
-    //                     }}
-    //                   >
-    //                     <MdEdit
-    //                       fontSize={23}
-    //                       onClick={() => handleEdit(user._id)}
-    //                     />
-    //                   </Typography>
-    //                 </Box>
-    //               </Box>
-    //               {user.options.map((e, index) => (
-    //                 <Box
-    //                   key={index}
-    //                   sx={{
-    //                     display: "flex",
-    //                     justifyContent: "space-between",
-    //                   }}
-    //                 >
-    //                   <Typography p={1}> {e.option}</Typography>
-    //                   <Typography>Vote {e.vote}</Typography>
-    //                 </Box>
-    //               ))}
-    //               <Button
-    //                 variant="contained"
-    //                 onClick={() => handleAddOption(user._id)}
-    //                 disabled={user.options.length >= 4}
-    //                 sx={{
-    //                   mr: 1,
-    //                   background: "#168594",
-    //                   fontWeight: "bold",
-    //                   "&:hover": {
-    //                     backgroundColor: "#168594",
-    //                   },
-    //                 }}
-    //               >
-    //                 Add Option
-    //               </Button>
-    //               <Button
-    //                 onClick={() => handleDelete(user._id)}
-    //                 sx={{
-    //                   color: "#ffffff",
-    //                   fontWeight: "bold",
-    //                   background: "#FF0000",
-    //                   "&:hover": {
-    //                     backgroundColor: "red",
-    //                   },
-    //                 }}
-    //               >
-    //                 <MdDelete fontSize={25} />
-    //               </Button>
-    //             </CardContent>
-    //           </Card>
-    //         ))}
-    //       </Grid>
-    //     </Grid>
-    //   </Stack>
-    //   <ToastContainer />
-    //   <DeleteModal open={open} deleteId={deleteId} handleClose={handleClose} />
-    //   <EditModal
-    //     editOpen={editOpen}
-    //     handleEditClose={handleEditClose}
-    //     editId={editId}
-    //     title={title}
-    //   />
-    //   <AddOptionModal handleAddOptionClose={handleAddOptionClose} addOptionOpen={addOptionOpen} addOptionId={addOptionId}/>
-    // </>
     <Box
       sx={{
         width: "100%",
@@ -372,7 +157,7 @@ function AdminDashBoard() {
             <Card
               key={user._id}
               sx={{
-                width: { lg: "48%", sm: "47%", md: "47%", xs: "95%" },
+                width: { lg: "49%", sm: "47%", md: "47%", xs: "95%" },
                 borderRadius: 5,
                 marginTop: 3,
                 pt: 2,
@@ -433,7 +218,6 @@ function AdminDashBoard() {
                      <Button
                     variant="contained"
                     onClick={() => handleAddOption(user._id)}
-                    // disabled={user.options.length >= 4}
                     sx={{
                       mr: 1,
                       background: "#168594",
@@ -469,19 +253,6 @@ function AdminDashBoard() {
         )}
       </Box>
       <Box sx={{ margin: "auto", width: { sm: "70%", display:"flex",justifyContent:"center"} }}>
-        {/* <Pagination
-          sx={{
-            margin: "auto",
-            width: {
-              lg: "35%",
-              sm: "70%",
-            },
-          }}
-          count={Math.ceil(addOptionData.length / itemsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        /> */}
         <Pagination 
          sx={{
           margin: "auto",
@@ -490,10 +261,9 @@ function AdminDashBoard() {
             sm: "70%",
           },
         }}
-        //  count={Math.ceil(addOptionData.length / itemsPerPage)}
+         count={Math.ceil(adminPollData.length / itemsPerPage)}
          page={currentPage}
          onChange={handlePageChange}
-        count={5}
          color="primary" />
       </Box>
       <ToastContainer />

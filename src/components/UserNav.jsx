@@ -36,19 +36,22 @@ function UserNav() {
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
               fontWeight: 700,
-              letterSpacing: '.3rem',
               fontSize:30,
               color: 'inherit',
               textDecoration: 'none',
               textAlign:"center",
-              width:"60%",
-              justifyContent:"flex-end"
+              width:{lg:"60%",md:""},
+              justifyContent:"flex-end",
+              display:"block",
+              '& .Mui-Topography-root':{
+                letterSpacing: {lg:".3rem",md:".2rem",sm:".1rem"},
+              }
             }}
           >
             User Dashboard
           </Typography>
 
-          <Box sx={{ flexGrow: 0 ,width:"38%",display:"flex",justifyContent:"flex-end",pr:3}}>
+          <Box sx={{ flexGrow: 0 ,width:{lg:"33%", md:"30%", sm:"auto",xs:"auto"},display:"flex",justifyContent:"flex-end",pr:3}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <MenuIcon sx={{mt:0}}/>

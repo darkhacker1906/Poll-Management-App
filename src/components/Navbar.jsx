@@ -34,27 +34,28 @@ function Navbar() {
   return (
     <AppBar position="static" sx={{background:"#158594"}}>
       <Container maxWidth="xl" >
-        <Toolbar disableGutters >
+        <Toolbar disableGutters  >
           <Typography
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              fontSize:30,
+              fontWeight: {lg:"700", md:"600",sm:"600"},
+              letterSpacing: {lg:".3rem",md:".2rem",sm:".1rem"},
+              fontSize:{lg:30,md:26,sm:23,xs:20},
               color: 'inherit',
               textDecoration: 'none',
               textAlign:"center",
-              width:"60%",
-              justifyContent:"flex-end"
+              width:"68%",
+             textAlign:{lg:"right", md:"right",sm:"left",xs:"left"},
+              display:"block"
             }}
           >
             Admin Dashboard
           </Typography>
 
-          <Box sx={{ flexGrow: 0 ,width:"38%",display:"flex",justifyContent:"flex-end",pr:3}}>
+          <Box sx={{ flexGrow: 0 ,width:{lg:"38%",sm:"38%",xs:"30%"},display:"flex",justifyContent:"flex-end",pr:{lg:1,md:1,sm:1,xs:2}}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <MenuIcon sx={{mt:0}}/>

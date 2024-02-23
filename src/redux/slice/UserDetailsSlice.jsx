@@ -42,7 +42,6 @@ export async function userApi() {
   dispatch(startLoading());
   try {
     let response = await Instance.get(`list_users`);
-    console.log(response);
     if(response.data.error === 0){
         dispatch(loginSuccessful(response.data));
     }
