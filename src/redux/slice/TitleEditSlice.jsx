@@ -44,8 +44,7 @@ export const EditPollApi = (id,updatedData) => async () => {
         `/update_poll_title?id=${id}&title=${updatedData}`,
         updatedData
       );
-    console.log(response);
-    dispatch(editPoll.actions.loginSuccessful(response.data));
+    dispatch(editPoll.actions.editSuccessful(response.data));
   } catch (e) {
     dispatch(editPoll.actions.hasError(e));
   }

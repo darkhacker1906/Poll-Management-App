@@ -1,77 +1,64 @@
-import React, { useEffect } from "react";
-import {
-  Box,
-  Button,
-  Stack,
-  TextField,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import { ToastContainer, toast } from "react-toastify";
+import * as React from "react";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+import { dispatch } from "../redux/store/store";
+import { CircularProgress, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
-import { useNavigate, useLocation, NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { AddOptionApi } from "../redux/slice/AddOptionSlice";
-import { addPollResetReducer } from "../redux/slice/AddPollSlice";
+import { AddOptionApi, addOptionResetReducer } from "../redux/slice/AddOptionSlice";
+import { useSelector } from "react-redux";
 
-const AddOption = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const addOptiondata = useSelector((state) => state.addOption);
-  const isLoading = addOptiondata.loading;
-  console.log(addOptiondata);
-  useEffect(() => {
-    if (addOptiondata && addOptiondata.isSuccess) {
-      toast.success("Option added successfully", { autoClose: 1000 });
-    } else if (addOptiondata && addOptiondata.isError) {
-      toast.success("Option not added successfully", { autoClose: 1000 });
-    }
-  }, [addOptiondata.isSuccess]);
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "1px solid #454545",
+  boxShadow: 24,
+  p: 4,
+};
 
+export default function AddOptionModal({
+  addOptionOpen,
+  handleAddOptionClose,
+  addOptionId
+}) {
+ const isLoading=useSelector((state)=>state.addOption.loading);
   const initialValues = {
     option: "",
-    id: location.state.id,
   };
   const { values, handleChange, handleSubmit, resetForm } = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => {
-      const id = values.id;
+      const id = addOptionId;
       const option = values.option.trim();
       if (option) {
         const data = { id, option };
         dispatch(AddOptionApi(data));
         setTimeout(() => {
-          navigate("/admin");
+         handleAddOptionClose();
         }, 200);
       } else {
         toast.error("Please enter option value", { autoClose: 1000 });
-        dispatch(addPollResetReducer());
+        dispatch(addOptionResetReducer());
       }
-      dispatch(addPollResetReducer());
+      dispatch(addOptionResetReducer());
       resetForm();
     },
   });
 
   return (
-    <Box
-      sx={{
-        background:
-          "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
-        height: "100vh",
-        padding: "20px",
-      }}
-    >
-      <Box
-        className="formBodyStyle"
-        sx={{
-          width: 500,
-          marginX: "auto",
-          background: "white",
-          padding: 4,
-          borderRadius: 3,
-        }}
+    <div>
+      <Modal
+        open={addOptionOpen}
+        onClose={handleAddOptionClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
       >
+        <Box sx={style}>
         <form onSubmit={handleSubmit}>
           <Stack direction={"column"} spacing={2} className="form_container">
             <Typography
@@ -94,7 +81,7 @@ const AddOption = () => {
               onChange={handleChange}
             />
             {isLoading ? (
-              <CircularProgress color="primary" />
+              <Box display={"flex"} sx={{justifyContent:"center"}}><CircularProgress color="primary" /></Box>
             ) : (
               <Button
                 type="submit"
@@ -110,7 +97,6 @@ const AddOption = () => {
                 Update
               </Button>
             )}
-            <NavLink to={"/admin"} width="100%">
               <Button
                 sx={{
                   background:
@@ -121,16 +107,14 @@ const AddOption = () => {
                   width: "100%",
                 }}
                 variant="contained"
+                onClick={()=>handleAddOptionClose()}
               >
                 Cancel
               </Button>
-            </NavLink>
           </Stack>
         </form>
-        <ToastContainer />
-      </Box>
-    </Box>
+        </Box>
+      </Modal>
+    </div>
   );
-};
-
-export default AddOption;
+}

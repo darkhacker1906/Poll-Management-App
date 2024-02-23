@@ -28,7 +28,7 @@ const addOption = createSlice({
       state.isSuccess = false;
       state.data = action.payload;
     },
-    resetReducer(state) {
+    addOptionResetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
@@ -55,7 +55,7 @@ export const AddOptionApi = (payload) => async () => {
   }
 };
 
-export const { startLoading, addSuccessful, hasError, resetReducer } =
+export const { startLoading, addSuccessful, hasError, addOptionResetReducer } =
   addOption.actions;
 
 export default addOption.reducer;
