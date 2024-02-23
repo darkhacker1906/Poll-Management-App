@@ -22,8 +22,6 @@ function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
   const UserVoteData = useSelector((state) => state.userVote);
-  // const [column1Data, setColumn1Data] = useState([]);
-  // const [column2Data, setColumn2Data] = useState([]);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
 
@@ -59,6 +57,7 @@ function UserDashBoard() {
     //   "disabledOptions",
     //   JSON.stringify({ ...disabledOptions, addId: OptionIndex })
     // );
+    dispatch()
   };
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -84,8 +83,7 @@ function UserDashBoard() {
         height: "100vh",
         overflow: "auto",
         margin: "auto",
-        background:
-          "linear-gradient(80deg, #2193b0 0.3%, #6dd5ed 87.8%)",
+        background: "linear-gradient(80deg, #2193b0 0.3%, #6dd5ed 87.8%)",
       }}
     >
       <UserNav />
@@ -141,7 +139,7 @@ function UserDashBoard() {
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        mt:1
+                        mt: 1,
                       }}
                     >
                       <Typography p={1}>{e.option}</Typography>
@@ -154,7 +152,7 @@ function UserDashBoard() {
                       </Button>
                     </Box>
                   ))}
-                  <Box sx={{pl:1}}>View a poll</Box>
+                  <Box sx={{ pl: 1 }}>View a poll</Box>
                 </CardContent>
               )}
             </Card>
@@ -169,19 +167,41 @@ function UserDashBoard() {
           width: { sm: "70%", display: "flex", justifyContent: "center" },
         }}
       >
-        <Pagination
-          sx={{
-            margin: "auto",
-            width: {
-              lg: "35%",
-              sm: "70%",
-            },
-          }}
-          count={Math.ceil(adminPollData.length / itemsPerPage)}
-          page={currentPage}
-          onChange={handlePageChange}
-          color="primary"
-        />
+        {currentItems.length > 2 ? (
+          <Pagination
+            sx={{
+              margin: "auto",
+              width: {
+                lg: "35%",
+                sm: "70%",
+              },
+              display: "flex",
+              justifyContent: "center",
+            }}
+            count={Math.ceil(adminPollData.length / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        ) : (
+          <Pagination
+            sx={{
+              margin: "auto",
+              width: {
+                lg: "35%",
+                sm: "70%",
+                bottom: 0,
+                position: "fixed",
+                display: "flex",
+                justifyContent: "center",
+              },
+            }}
+            count={Math.ceil(adminPollData.length / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        )}
       </Box>
       <ToastContainer />
     </Box>

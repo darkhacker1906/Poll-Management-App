@@ -128,6 +128,7 @@ function AdminDashBoard() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = reversedPollList.slice(startIndex, endIndex);
+  console.log(currentItems);
 
   return (
     <Box
@@ -148,8 +149,8 @@ function AdminDashBoard() {
           flexWrap: "wrap",
           width: "97%",
           margin: "auto",
-          justifyContent:"space-between",
-          padding:1
+          justifyContent: "space-between",
+          padding: 1,
         }}
       >
         {currentItems && currentItems.length > 0 ? (
@@ -162,13 +163,16 @@ function AdminDashBoard() {
                 marginTop: 3,
                 pt: 2,
                 opacity: 0.8,
+                height: "280px",
                 "&:hover": {
                   boxShadow: "15px 15px 15px teal",
                 },
               }}
             >
               {user && (
-                <CardContent>
+                <CardContent sx={{height:"90%",
+                display:"flex",justifyContent:"space-between",flexDirection:"column"}}>
+                  <Box sx={{display:"flex",justifyContent:"space-between",flexDirection:"column"}}>
                   <Box
                     display={"flex"}
                     sx={{
@@ -176,7 +180,7 @@ function AdminDashBoard() {
                       background: "#08B3B7",
                     }}
                   >
-                    <Typography p={1}>{user.title}</Typography>{" "}
+                    <Typography p={1} sx={{fontSize:"19px",fontWeight:"500"}}>{user.title}</Typography>{" "}
                     <Box
                       sx={{
                         display: "flex",
@@ -185,8 +189,10 @@ function AdminDashBoard() {
                         mr: 1,
                       }}
                     >
-                      <Typography
+                      <Button
+                      variant="contained"
                         sx={{
+                          backgroundColor:"#178393",
                           "&:hover": {
                             cursor: "pointer",
                           },
@@ -197,7 +203,7 @@ function AdminDashBoard() {
                           fontSize={23}
                           onClick={() => handleEdit(user._id)}
                         />
-                      </Typography>
+                      </Button>
                     </Box>
                   </Box>
 
@@ -213,24 +219,25 @@ function AdminDashBoard() {
                       <Typography>Vote {e.vote}</Typography>
                     </Box>
                   ))}
-                  {
-                    user.options.length<4 && 
-                     <Button
-                    variant="contained"
-                    onClick={() => handleAddOption(user._id)}
-                    sx={{
-                      mr: 1,
-                      background: "#168594",
-                      fontWeight: "bold",
-                      "&:hover": {
-                        backgroundColor: "#168594",
-                      },
-                    }}
-                  >
-                    Add Option
-                  </Button>
-                  }
-                 
+                  </Box>
+                  <Box>
+                  {user.options.length < 4 && (
+                    <Button
+                      variant="contained"
+                      onClick={() => handleAddOption(user._id)}
+                      sx={{
+                        mr: 1,
+                        background: "#168594",
+                        fontWeight: "bold",
+                        "&:hover": {
+                          backgroundColor: "#168594",
+                        },
+                      }}
+                    >
+                      Add Option
+                    </Button>
+                  )}
+
                   <Button
                     onClick={() => handleDelete(user._id)}
                     sx={{
@@ -244,6 +251,7 @@ function AdminDashBoard() {
                   >
                     <MdDelete fontSize={25} />
                   </Button>
+                  </Box>
                 </CardContent>
               )}
             </Card>
@@ -252,20 +260,68 @@ function AdminDashBoard() {
           <Typography variant="h6" textAlign={"center"}></Typography>
         )}
       </Box>
-      <Box sx={{ margin: "auto", width: { sm: "70%", display:"flex",justifyContent:"center"} }}>
-        <Pagination 
-         sx={{
+      <Box
+        sx={{
           margin: "auto",
-          width: {
-            lg: "35%",
-            sm: "70%",
-          },
+          width: { sm: "70%", display: "flex", justifyContent: "center" },
         }}
+      >
+        {/* {currentItems.length > 2 ? ( */}
+          {/* <Pagination
+            sx={{
+              margin: "auto",
+              width: {
+                lg: "35%",
+                sm: "70%",
+              },
+              display: "flex",
+              justifyContent: "center",
+            }}
+            count={Math.ceil(adminPollData.length / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          /> */}
+        {/* ) : ( */}
+         
+      </Box>
+     {
+         currentItems.length>2? <Pagination
+         sx={{
+           margin: "auto",
+           width: {
+             lg: "35%",
+             sm: "70%",
+             bottom: 0,
+             display: "flex",
+             justifyContent: "center",
+           },
+         }}
          count={Math.ceil(adminPollData.length / itemsPerPage)}
          page={currentPage}
          onChange={handlePageChange}
-         color="primary" />
-      </Box>
+         color="primary"
+       />:
+       <Pagination
+         sx={{
+           margin: "auto",
+           width: {
+             lg: "35%",
+             sm: "70%",
+             bottom: 0,
+             display: "flex",
+             justifyContent: "center",
+             position:"fixed",
+             left: "50%",
+             transform: "translateX(-50%)",
+           },
+         }}
+         count={Math.ceil(adminPollData.length / itemsPerPage)}
+         page={currentPage}
+         onChange={handlePageChange}
+         color="primary"
+       />
+     }
       <ToastContainer />
       <DeleteModal open={open} deleteId={deleteId} handleClose={handleClose} />
       <EditModal
