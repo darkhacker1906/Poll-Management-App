@@ -26,7 +26,7 @@ function UserNav() {
     localStorage.clear();
   };
   return (
-    <AppBar position="static" sx={{background:"#158594"}}>
+    <AppBar position="static" sx={{background:"#2E9FBB"}}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters >
           <Typography
@@ -35,23 +35,20 @@ function UserNav() {
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
-              fontWeight: 700,
-              fontSize:30,
+              fontWeight: {lg:"700", md:"600",sm:"600"},
+              letterSpacing: {lg:".3rem",md:".2rem",sm:".1rem"},
+              fontSize:{lg:30,md:26,sm:23,xs:20},
               color: 'inherit',
               textDecoration: 'none',
               textAlign:"center",
-              width:{lg:"60%",md:""},
-              justifyContent:"flex-end",
-              display:"block",
-              '& .Mui-Topography-root':{
-                letterSpacing: {lg:".3rem",md:".2rem",sm:".1rem"},
-              }
+              width:"68%",
+             textAlign:{lg:"right", md:"right",sm:"left",xs:"left"},
+              display:"block"
             }}
           >
             User Dashboard
           </Typography>
-
-          <Box sx={{ flexGrow: 0 ,width:{lg:"33%", md:"30%", sm:"auto",xs:"auto"},display:"flex",justifyContent:"flex-end",pr:3}}>
+          <Box sx={{ flexGrow: 0 ,width:{lg:"38%",sm:"38%",xs:"30%"},display:"flex",justifyContent:"flex-end",pr:{lg:1,md:1,sm:1,xs:2}}}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <MenuIcon sx={{mt:0}}/>
