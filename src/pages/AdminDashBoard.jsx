@@ -128,7 +128,6 @@ function AdminDashBoard() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = reversedPollList.slice(startIndex, endIndex);
-  console.log(currentItems);
 
   return (
     <Box
@@ -137,8 +136,10 @@ function AdminDashBoard() {
         height: "100vh",
         overflow: "auto",
         margin: "auto",
-        background:
-          "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
+        // background:
+        //   "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
+        // background:"linear-gradient()"
+        background:"#6e8f9575"
       }}
     >
       <Navbar />
@@ -162,10 +163,10 @@ function AdminDashBoard() {
                 borderRadius: 5,
                 marginTop: 3,
                 pt: 2,
-                opacity: 0.8,
+                border:"1px solid #aca9a9",
                 height: "280px",
                 "&:hover": {
-                  boxShadow: "15px 15px 15px teal",
+                  boxShadow: "5px 5px 5px grey",
                 },
               }}
             >
@@ -180,7 +181,7 @@ function AdminDashBoard() {
                       background: "#08B3B7",
                     }}
                   >
-                    <Typography p={1} sx={{fontSize:"19px",fontWeight:"500"}}>{user.title}</Typography>{" "}
+                    <Typography p={1} sx={{fontSize:"19px",fontWeight:"600"}}>{user.title}</Typography>{" "}
                     <Box
                       sx={{
                         display: "flex",
@@ -191,6 +192,7 @@ function AdminDashBoard() {
                     >
                       <Button
                       variant="contained"
+                      onClick={() => handleEdit(user._id)}
                         sx={{
                           backgroundColor:"#178393",
                           "&:hover": {
@@ -201,7 +203,7 @@ function AdminDashBoard() {
                         {" "}
                         <MdEdit
                           fontSize={23}
-                          onClick={() => handleEdit(user._id)}
+                          
                         />
                       </Button>
                     </Box>
@@ -213,6 +215,8 @@ function AdminDashBoard() {
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
+                        borderBottom:"1px solid #aca9a9",
+                        paddingTop:"4px"
                       }}
                     >
                       <Typography p={1}>{e.option}</Typography>
@@ -265,25 +269,7 @@ function AdminDashBoard() {
           margin: "auto",
           width: { sm: "70%", display: "flex", justifyContent: "center" },
         }}
-      >
-        {/* {currentItems.length > 2 ? ( */}
-          {/* <Pagination
-            sx={{
-              margin: "auto",
-              width: {
-                lg: "35%",
-                sm: "70%",
-              },
-              display: "flex",
-              justifyContent: "center",
-            }}
-            count={Math.ceil(adminPollData.length / itemsPerPage)}
-            page={currentPage}
-            onChange={handlePageChange}
-            color="primary"
-          /> */}
-        {/* ) : ( */}
-         
+      >    
       </Box>
      {
          currentItems.length>2? <Pagination
