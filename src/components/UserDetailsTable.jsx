@@ -31,7 +31,7 @@ const Table = () => {
   return (
     <>
       <Stack sx={{ width:{lg:"80%",md:"80%",xs:"100%"}, gap: 0, marginX: "auto", marginY:"0",overflowX:'auto'}}>
-        <Box sx={{width:{lg:"100% "} , padding:{lg:3,md:2,sm:1} , margin:'auto',overflowX:'auto'}}>
+        <Box sx={{width:{lg:"100% "} , padding:{lg:3,md:2,sm:1} , margin:'auto'}}>
           <table style={{width:'100%',minWidth:"600px",overflowX:'auto'}}>
             <tr  style={{width:"100%"}}>
               <th style={{width:"40%"}}>
