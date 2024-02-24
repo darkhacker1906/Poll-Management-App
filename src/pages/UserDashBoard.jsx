@@ -5,6 +5,7 @@ import {
   CardContent,
   CircularProgress,
   Grid,
+  Pagination,
   Stack,
   Typography,
 } from "@mui/material";
@@ -21,21 +22,26 @@ function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
   const UserVoteData = useSelector((state) => state.userVote);
-  const [column1Data, setColumn1Data] = useState([]);
-  const [column2Data, setColumn2Data] = useState([]);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
-  useEffect(() => {
-    const storedDisabledOptions =
-      JSON.parse(localStorage.getItem("disabledOptions")) || {};
-    setDisabledOptions(storedDisabledOptions);
-  }, []);
-  const [disabledOptions, setDisabledOptions] = useState({});
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
+
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+  // useEffect(() => {
+  //   const storedDisabledOptions =
+  //     JSON.parse(localStorage.getItem("disabledOptions")) || {};
+  //   setDisabledOptions(storedDisabledOptions);
+  // }, []);
+  // const [disabledOptions, setDisabledOptions] = useState({});
 
   const handleViewPoll = () => {
     navigate("/user/viewpoll");
   };
-  const add_poll = (id, option) => {
+  const add_vote = (id, option) => {
     const header = {
       headers: {
         access_token: token,
@@ -51,168 +57,154 @@ function UserDashBoard() {
     //   "disabledOptions",
     //   JSON.stringify({ ...disabledOptions, addId: OptionIndex })
     // );
+    dispatch()
   };
   useEffect(() => {
     dispatch(AdminPollApi());
   }, [dispatch]);
 
   useEffect(() => {
-    const halfData = Math.ceil(adminPollData.length / 2);
-    setColumn1Data(adminPollData.slice(0, halfData));
-    setColumn2Data(adminPollData.slice(halfData));
-  }, [adminPollData]);
-
-  useEffect(() => {
-    if (UserVoteData.isSuccess) {
-      // toast.success("Vote added successfully", { autoClose: 1000 });
-      console.log("Hello");
+    if (UserVoteData && UserVoteData.isSuccess) {
+      toast.success("Vote added successfully", { autoClose: 1000 });
     } else if (addId !== null && UserVoteData && UserVoteData.isError !== 0) {
       toast.error("Failed to add vote", { autoClose: 1000 });
     }
-  }, [UserVoteData.isSuccess, addId,UserVoteData.isError]);
+  }, [UserVoteData.isSuccess, addId, UserVoteData.isError]);
+
+  const reversedPollList = [...adminPollData].reverse();
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentItems = reversedPollList.slice(startIndex, endIndex);
 
   return (
-    <>
-      <Stack
+    <Box
+      sx={{
+        width: "100%",
+        height: "100vh",
+        overflow: "auto",
+        margin: "auto",
+        background: "linear-gradient(80deg, #2193b0 0.3%, #6dd5ed 87.8%)",
+      }}
+    >
+      <UserNav />
+      <Box
         sx={{
-          background:
-            "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
-          minHeight: "100vh",
-          minWidth: "100vh",
+          marginTop: 2,
+          display: "flex",
+          flexWrap: "wrap",
+          width: "97%",
+          margin: "auto",
+          justifyContent: "space-between",
+          padding: 1,
         }}
       >
-        <UserNav />
-        <Grid container spacing={5} p={5}>
-          <Grid item xs={12} md={6} sm={6}>
-            {column1Data.map((user) => (
-              <Card
-                key={user._id}
-                sx={{
-                  minWidth: 300,
-                  width: "100%",
-                  borderRadius: 5,
-                  marginTop: 3,
-                  opacity: 0.8,
-                }}
-              >
-                {user && (
-                  <CardContent>
+        {currentItems && currentItems.length > 0 ? (
+          currentItems.map((user) => (
+            <Card
+              key={user._id}
+              sx={{
+                width: { lg: "49%", sm: "47%", md: "47%", xs: "95%" },
+                borderRadius: 5,
+                marginTop: 3,
+                pt: 2,
+                opacity: 0.8,
+                "&:hover": {
+                  boxShadow: "15px 15px 15px teal",
+                },
+              }}
+            >
+              {user && (
+                <CardContent>
+                  <Box
+                    display={"flex"}
+                    sx={{
+                      justifyContent: "space-between",
+                      background: "#2E9FBB",
+                    }}
+                  >
+                    <Typography p={1}>{user.title}</Typography>{" "}
                     <Box
-                      display={"flex"}
                       sx={{
-                        justifyContent: "space-between",
-                        background: "#06B9BC",
-                        p: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        mr: 1,
                       }}
-                    >
-                      <Typography>{user.title}</Typography>{" "}
-                    </Box>
-                    {user.options.map((e, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          mt: 1,
-                          pl: 1,
-                        }}
-                      >
-                        <Typography>{e.option}</Typography>
-                        <Button
-                          variant="contained"
-                          sx={{ background: "#1A778A" }}
-                          onClick={() => add_poll(user._id, e.option)}
-                        >
-                          Vote
-                        </Button>
-                      </Box>
-                    ))}
-                    <Box pl={1}>
-                      <Typography
-                        sx={{
-                          "&:hover": {
-                            color: "#168594",
-                            cursor: "pointer",
-                          },
-                        }}
-                        onClick={() => handleViewPoll()}
-                      >
-                        View a poll
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
-          </Grid>
-          <Grid item xs={12} sm={6} md={6}>
-            {column2Data.map((user) => (
-              <Card
-                key={user._id}
-                sx={{
-                  minWidth: 300,
-                  width: "100%",
-                  borderRadius: 5,
-                  marginTop: 3,
-                  opacity: 0.8,
-                }}
-              >
-                {user && (
-                  <CardContent>
-                    <Box
-                      display={"flex"}
-                      sx={{
-                        justifyContent: "space-between",
-                        background: "#06B9BC",
-                        p: 1,
-                      }}
-                    >
-                      <Typography>{user.title}</Typography>{" "}
-                    </Box>
+                    ></Box>
+                  </Box>
 
-                    {user.options.map((e, index) => (
-                      <Box
-                        key={index}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          mt: 1,
-                          pl: 1,
-                        }}
+                  {user.options.map((e, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        mt: 1,
+                      }}
+                    >
+                      <Typography p={1}>{e.option}</Typography>
+                      <Button
+                        variant="contained"
+                        sx={{ background: "#1A778A" }}
+                        onClick={() => add_vote(user._id, e.option)}
                       >
-                        <Typography>{e.option}</Typography>
-                        <Button
-                          variant="contained"
-                          // disabled=
-                          sx={{ background: "#1A778A" }}
-                          onClick={() => add_poll(user._id, e.option)}
-                        >
-                          Vote
-                        </Button>
-                      </Box>
-                    ))}
-                    <Box pl={1}>
-                      <Typography
-                        sx={{
-                          "&:hover": {
-                            color: "#168594",
-                            cursor: "pointer",
-                          },
-                        }}
-                        onClick={() => handleViewPoll()}
-                      >
-                        View a poll
-                      </Typography>
+                        Vote
+                      </Button>
                     </Box>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
-          </Grid>
-        </Grid>
-      </Stack>
+                  ))}
+                  <Box sx={{ pl: 1 }}>View a poll</Box>
+                </CardContent>
+              )}
+            </Card>
+          ))
+        ) : (
+          <Typography variant="h6" textAlign={"center"}></Typography>
+        )}
+      </Box>
+      <Box
+        sx={{
+          margin: "auto",
+          width: { sm: "70%", display: "flex", justifyContent: "center" },
+        }}
+      >
+        {currentItems.length > 2 ? (
+          <Pagination
+            sx={{
+              margin: "auto",
+              width: {
+                lg: "35%",
+                sm: "70%",
+              },
+              display: "flex",
+              justifyContent: "center",
+            }}
+            count={Math.ceil(adminPollData.length / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        ) : (
+          <Pagination
+            sx={{
+              margin: "auto",
+              width: {
+                lg: "35%",
+                sm: "70%",
+                bottom: 0,
+                position: "fixed",
+                display: "flex",
+                justifyContent: "center",
+              },
+            }}
+            count={Math.ceil(adminPollData.length / itemsPerPage)}
+            page={currentPage}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        )}
+      </Box>
       <ToastContainer />
-    </>
+    </Box>
   );
 }
 

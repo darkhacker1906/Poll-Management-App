@@ -13,6 +13,7 @@ import { useNavigate, useLocation, NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AddOptionApi } from "../redux/slice/AddOptionSlice";
 import { addPollResetReducer } from "../redux/slice/AddPollSlice";
+import { addPollSchema } from "../schemas/Validation";
 
 const AddOption = () => {
   const dispatch = useDispatch();

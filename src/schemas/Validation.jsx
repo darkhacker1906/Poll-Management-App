@@ -9,3 +9,8 @@ export const signinSchema=Yup.object({
     username:Yup.string().min(4).required("Please enter your username"),
     password:Yup.string().min(6).required("Please enter your password"),
 })
+export const addPollSchema=Yup.object({
+    title:Yup.string().required("Please enter your title "),
+    option1:Yup.string().required("Please enter your option"),
+    option2:Yup.string().required("Please enter your option"),
+})

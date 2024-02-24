@@ -17,6 +17,8 @@ import { useSelector } from "react-redux";
 import { addPollApi, addPollResetReducer } from "../redux/slice/AddPollSlice";
 import { ToastContainer, toast } from "react-toastify";
 import CloseIcon from "@mui/icons-material/Close";
+import FormError from "../schemas/formError";
+import { addPollSchema } from "../schemas/Validation";
 
 function AddPoll() {
   const navigate = useNavigate();
@@ -24,16 +26,20 @@ function AddPoll() {
   const isLoading = addPollslice.loading;
   const initialValues = {
     title: "",
-    option1: "",
-    option2: "",
   };
   const [rowData, setRowData] = useState([]);
   const addInputField = () => {
     const data = [...rowData, ""];
     setRowData(data);
   };
-  const { handleSubmit, resetForm, handleChange, values } = useFormik({
+    const handleRemoveOption = (index) => {
+    const updatedData = [...rowData];
+    updatedData.splice(index, 1);
+    setRowData(updatedData);
+  };
+  const { handleSubmit, resetForm, handleChange, values,handleBlur,errors,touched} = useFormik({
     initialValues: initialValues,
+    validationSchema: addPollSchema,
     onSubmit: async (values) => {
       try {
         if (values.title.trim() !== "") {
@@ -83,48 +89,66 @@ function AddPoll() {
               <Typography sx={{ textAlign: "center" }} variant="h4">
                 Add Poll
               </Typography>
-              <TextField
-                variant="outlined"
-                label="Title"
-                name="title"
-                value={values.title}
-                onChange={handleChange}
-              />
-             
-              <TextField
-                variant="outlined"
-                label="Option1"
-                name="option1"
-                value={values.option1}
-                onChange={handleChange}
-                sx={{width:'450px'}}
-                fullWidth
-              />
-              <TextField
-                variant="outlined"
-                label="Option2"
-                name="option2"
-                value={values.option2}
-                onChange={handleChange}
-                fullWidth
-                sx={{width:'450px'}}
-              />
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Title"
+                  name="title"
+                  id="title"
+                  value={values.title}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fullWidth
+                  // sx={{ width: "410px" }}
+                />
+                 {errors.title && touched.title && (
+                  <FormError error_msg={errors.title} />
+                )}
+              </Box>
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Option1"
+                  name="option1"
+                  value={values.option1}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  fullWidth
+                  // sx={{ width: "410px" }}
+                />
+                 {errors.option1 && touched.option1 && (
+                  <FormError error_msg={errors.option1} />
+                )}
+              </Box>
+
+              <Box>
+                <TextField
+                  variant="outlined"
+                  label="Option2"
+                  name="option2"
+                  onBlur={handleBlur}
+                  value={values.option2}
+                  onChange={handleChange}
+                  fullWidth
+                  // sx={{ width: "410px" }}
+                />
+                   {errors.option2 && touched.option2 && (
+                  <FormError error_msg={errors.option2} />
+                )}
+              </Box>
+
               {rowData.map((data, index) => (
-                <Box sx={{display:"flex" , width:'450px'}}>
+                // <Box sx={{ display: "flex"}}>
                   <TextField
                     key={index}
                     onChange={handleChange}
                     variant="outlined"
                     value={values.name}
+                    onBlur={handleBlur}
                     label={`Option${index + 3}`}
                     name={`option${index + 3}`}
                     fullWidth
                   />
-                  <IconButton onClick={() => handleRemoveOption(index)}>
-                    {" "}
-                    <CloseIcon />
-                  </IconButton>
-                </Box>
               ))}
 
               <Box>
@@ -170,3 +194,8 @@ function AddPoll() {
 }
 
 export default AddPoll;
+ {/* <IconButton onClick={() => handleRemoveOption(index)}>
+                    {" "}
+                    <CloseIcon />
+                  </IconButton> */}
+                // </Box>

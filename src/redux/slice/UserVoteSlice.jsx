@@ -29,7 +29,7 @@ const userVote = createSlice({
       state.isSuccess = false;
       state.data = action.payload;
     },
-    resetReducer(state) {
+    userVoteResetReducer(state) {
       state.isError = false;
       state.loading = false;
       state.isSuccess = false;
@@ -47,7 +47,6 @@ console.log(payload);
         `do_vote?id=${id}&option_text=${option}`,
         header
       );
-    console.log(response);
     if(response.data.error === 0){
         dispatch(voteSuccessful(response.data));
     }
@@ -60,7 +59,7 @@ console.log(payload);
   }
 }
 
-export const { startLoading, getSuccess, voteSuccessful, hasError } =
+export const { startLoading, voteSuccessful,hasError,userVoteResetReducer } =
   userVote.actions;
 
 export default userVote.reducer;

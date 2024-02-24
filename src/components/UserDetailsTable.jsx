@@ -6,7 +6,7 @@ import { Box, Card, Stack, Pagination, CircularProgress } from "@mui/material";
 const Table = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(16);
+  const [itemsPerPage] = useState(8);
   const [displayedPages] = useState(3);
 
 const userDetails=useSelector((state)=>state.userDetails.data);
@@ -98,7 +98,6 @@ const userDetails=useSelector((state)=>state.userDetails.data);
                         width: 350,
                         padding: 2,
                         boxShadow: 2,
-                        //   bgcolor: "#dbdbdb99",
                         display: "flex",
                         justifyContent: "center",
                       }}
@@ -113,13 +112,12 @@ const userDetails=useSelector((state)=>state.userDetails.data);
                         width: 350,
                         padding: 2,
                         boxShadow: 2,
-                        //   bgcolor: "#dbdbdb99",
                         display: "flex",
                         justifyContent: "center",
                       }}
                       variant="outlined"
                     >
-                      {user.username}
+                      {user.username ? user.username:"No username"}
                     </Card>
                   </td>
                   <td>
@@ -128,13 +126,12 @@ const userDetails=useSelector((state)=>state.userDetails.data);
                         width: 350,
                         padding: 2,
                         boxShadow: 2,
-                        //   bgcolor: "#dbdbdb99",
                         display: "flex",
                         justifyContent: "center",
                       }}
                       variant="outlined"
                     >
-                      {user.role}
+                      {user.role ? user.role:"No role"}
                     </Card>
                   </td>
                 </tr>

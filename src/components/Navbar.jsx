@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import { useMediaQuery } from '@mui/material';
 
 function Navbar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -31,37 +32,55 @@ function Navbar() {
     navigate("/");
     localStorage.clear();
   };
+  const isLargeScreen = useMediaQuery('(min-width: 1280px)'); 
   return (
     <AppBar position="static" sx={{background:"#158594"}}>
       <Container maxWidth="xl" >
-        <Toolbar disableGutters >
+        <Toolbar disableGutters  >
           <Typography
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
               fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              fontSize:30,
+              fontWeight: {lg:"700", md:"600",sm:"600"},
+              letterSpacing: {lg:".3rem",md:".2rem",sm:".1rem"},
+              fontSize:{lg:30,md:26,sm:23,xs:20},
               color: 'inherit',
               textDecoration: 'none',
               textAlign:"center",
-              width:"60%",
-              justifyContent:"flex-end"
+              width:"68%",
+             textAlign:{lg:"right", md:"right",sm:"left",xs:"left"},
+              display:"block"
             }}
           >
             Admin Dashboard
           </Typography>
 
-          <Box sx={{ flexGrow: 0 ,width:"38%",display:"flex",justifyContent:"flex-end",pr:3}}>
+          <Box sx={{ flexGrow: 0 ,width:{lg:"38%",sm:"38%",xs:"30%"},display:"flex",justifyContent:"flex-end",pr:{lg:1,md:1,sm:1,xs:2}}}>
             <Tooltip title="Open settings">
+
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <MenuIcon sx={{mt:0}}/>
+              {isLargeScreen ? (
+          <span sx={{ display: { xs: 'none', md: 'none', lg: 'inline' }}}><Typography sx={{color:"white"}}>Menu</Typography></span>
+        ) : (
+          <MenuIcon sx={{ mt: 0 }} />
+        )}
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: '45px',
+            '& .MuiMenu-list': {
+              backgroundColor:"#42afb469",
+            },
+            '& .MuiMenuItem-root':{
+               "&:hover": {
+                background: "#1E647A",
+                color:"white"
+              },
+            }	
+            }}
+
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
