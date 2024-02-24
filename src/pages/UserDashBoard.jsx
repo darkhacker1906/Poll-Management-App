@@ -15,7 +15,7 @@ import { useSelector } from "react-redux";
 import { AdminPollApi } from "../redux/slice/AdminPollSlice";
 import { dispatch } from "../redux/store/store";
 import { ToastContainer, toast } from "react-toastify";
-import { userVoteApi } from "../redux/slice/UserVoteSlice";
+import { userVoteApi, userVoteResetReducer } from "../redux/slice/UserVoteSlice";
 import UserNav from "../components/UserNav";
 
 function UserDashBoard() {
@@ -24,6 +24,7 @@ function UserDashBoard() {
   const UserVoteData = useSelector((state) => state.userVote);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
+  const [option,setOption]=useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -31,45 +32,42 @@ function UserDashBoard() {
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
-  // useEffect(() => {
-  //   const storedDisabledOptions =
-  //     JSON.parse(localStorage.getItem("disabledOptions")) || {};
-  //   setDisabledOptions(storedDisabledOptions);
-  // }, []);
-  // const [disabledOptions, setDisabledOptions] = useState({});
 
-  const handleViewPoll = () => {
-    navigate("/user/viewpoll");
+  const header = {
+    headers: {
+      access_token: token,
+    },
   };
-  const add_vote = (id, option) => {
-    const header = {
-      headers: {
-        access_token: token,
-      },
-    };
-    dispatch(userVoteApi({ id, option, header }));
+  const add_vote =async (id, option) => {
+    // const header={
+    //   access_token: token
+    // }
+   
+    try{
+      await dispatch(userVoteApi(id, option, header ));
+      setAddId(id);
+      dispatch(userVoteResetReducer());
+    }catch(error){
+      console.log("error", error);
+    }finally{
+      dispatch(userVoteResetReducer());
+
+    }
     setAddId(id);
-    // setDisabledOptions((prev) => ({
-    //   ...prev,
-    //   addId: OptionIndex,
-    // }));
-    // localStorage.setItem(
-    //   "disabledOptions",
-    //   JSON.stringify({ ...disabledOptions, addId: OptionIndex })
-    // );
-    dispatch()
+ 
   };
   useEffect(() => {
     dispatch(AdminPollApi());
-  }, [dispatch]);
+  }, [UserVoteData]);
 
   useEffect(() => {
-    if (UserVoteData && UserVoteData.isSuccess) {
+    if (UserVoteData!=null && UserVoteData.isSuccess) {
       toast.success("Vote added successfully", { autoClose: 1000 });
     } else if (addId !== null && UserVoteData && UserVoteData.isError !== 0) {
-      toast.error("Failed to add vote", { autoClose: 1000 });
+      // toast.error("Failed to add vote", { autoClose: 1000 });
     }
-  }, [UserVoteData.isSuccess, addId, UserVoteData.isError]);
+    setAddId(null);
+  }, [UserVoteData.isSuccess, UserVoteData.isError]);
 
   const reversedPollList = [...adminPollData].reverse();
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -109,7 +107,7 @@ function UserDashBoard() {
                 pt: 2,
                 opacity: 0.8,
                 "&:hover": {
-                  boxShadow: "15px 15px 15px teal",
+                  boxShadow: "15px 15px 15px grey",
                 },
               }}
             >
@@ -152,7 +150,6 @@ function UserDashBoard() {
                       </Button>
                     </Box>
                   ))}
-                  <Box sx={{ pl: 1 }}>View a poll</Box>
                 </CardContent>
               )}
             </Card>
