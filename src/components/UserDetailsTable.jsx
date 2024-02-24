@@ -30,15 +30,14 @@ const Table = () => {
   const paginate = (e, value) => setCurrentPage(value);
   return (
     <>
-      <Stack sx={{ width: "98%", gap: 0, marginX: "auto", marginY:"0"}}>
-        <Box sx={{width:{lg:"100% " , sm :'80%'},overflowX:"auto" , padding:3 , margin:'auto'}}>
-          <table>
-            <tr>
-              <th>
+      <Stack sx={{ width:{lg:"80%",md:"80%",xs:"100%"}, gap: 0, marginX: "auto", marginY:"0",overflowX:'auto'}}>
+        <Box sx={{width:{lg:"100% "} , padding:{lg:3,md:2,sm:1} , margin:'auto',overflowX:'auto'}}>
+          <table style={{width:'100%',minWidth:"600px",overflowX:'auto'}}>
+            <tr  style={{width:"100%"}}>
+              <th style={{width:"40%"}}>
                 <Card
                   sx={{
-                    justifyContent: "center",
-                    width: 350,
+                    justifyContent: "center", 
                     padding: 2,
                     boxShadow: 4,
                     bgcolor: "#1282c570",
@@ -50,10 +49,11 @@ const Table = () => {
                   Id
                 </Card>
               </th>
-              <th>
+              <th style={{width:"30%"}}>
                 <Card
                   sx={{
-                    width: 350,
+                    // maxWidth: 350,
+                    // minWidth: 280,
                     padding: 2,
                     boxShadow: 2,
                     bgcolor: "#1282c570",
@@ -66,10 +66,11 @@ const Table = () => {
                   User name
                 </Card>
               </th>{" "}
-              <th>
+              <th style={{width:"30%"}}>
                 <Card
                   sx={{
-                    width: 350,
+                    // maxWidth: 350,
+                    // minWidth: 280,
                     padding: 2,
                     boxShadow: 2,
                     bgcolor: "#1282c570",
@@ -89,7 +90,8 @@ const Table = () => {
                 <td>
                   <Card
                     sx={{
-                      minWidth: 350,
+                      // maxWidth: 350,
+                      // minWidth: 280,
                       padding: 2,
                       boxShadow: 2,
                       display: "flex",
@@ -123,7 +125,7 @@ const Table = () => {
                 <td>
                   <Card
                     sx={{
-                      width: 350,
+                      // width: 350,
                       padding: 2,
                       boxShadow: 2,
                       display: "flex",

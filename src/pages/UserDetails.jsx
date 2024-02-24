@@ -17,7 +17,7 @@ function UserDetails() {
   }, []);
   return (
     <Box sx={{background:
-      "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)", overflowX:"auto",height:"100vh"}}>
+      "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",height:"100vh"}}>
       {loading ? (
         <Box
           display={"flex"}
@@ -45,7 +45,7 @@ function UserDetails() {
           >
             <Button
               variant="contained"
-              sx={{ ml: 2, fontWeight: "bold", background: "#108FB3" }}
+              sx={{ ml: 2,mb:1, fontWeight: "bold", background: "#108FB3" }}
             >
               Go Back
             </Button>
