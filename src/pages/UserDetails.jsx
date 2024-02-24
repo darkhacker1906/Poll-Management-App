@@ -17,7 +17,7 @@ function UserDetails() {
   }, []);
   return (
     <Box sx={{background:
-      "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",height:"100vh"}}>
+      "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",height:"100vh" ,width:'100'}}>
       {loading ? (
         <Box
           display={"flex"}
@@ -27,6 +27,7 @@ function UserDetails() {
             background:
               "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
             height: "100%",
+         
           }}
         >
           <CircularProgress sx={{ color: "#ffffff" }} />
@@ -37,6 +38,7 @@ function UserDetails() {
             background:
               "linear-gradient(90.9deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
             width: "100%",
+               overflowX:{lg:0,md:0,sm:"auto"}
           }}
         >
           <NavLink

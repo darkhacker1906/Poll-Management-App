@@ -30,9 +30,10 @@ const Table = () => {
   const paginate = (e, value) => setCurrentPage(value);
   return (
     <>
-      <Stack sx={{ width:{lg:"80%",md:"80%",xs:"100%"}, gap: 0, marginX: "auto", marginY:"0",overflowX:'auto'}}>
+      <Stack sx={{ width:{lg:"80%",md:"80%",xs:"100%"}, gap: 0, marginX: "auto", marginY:"0",overflowX:{lg:"hidden",md:"hidden",sm:"hidden",xs:"auto"}}}>
         <Box sx={{width:{lg:"100% "} , padding:{lg:3,md:2,sm:1} , margin:'auto'}}>
-          <table style={{width:'100%',minWidth:"600px",overflowX:'auto'}}>
+    
+          <table style={{width:'100%',minWidth:"600px",overflowX:"auto"}}>
             <tr  style={{width:"100%"}}>
               <th style={{width:"40%"}}>
                 <Card
@@ -52,8 +53,6 @@ const Table = () => {
               <th style={{width:"30%"}}>
                 <Card
                   sx={{
-                    // maxWidth: 350,
-                    // minWidth: 280,
                     padding: 2,
                     boxShadow: 2,
                     bgcolor: "#1282c570",
@@ -69,8 +68,6 @@ const Table = () => {
               <th style={{width:"30%"}}>
                 <Card
                   sx={{
-                    // maxWidth: 350,
-                    // minWidth: 280,
                     padding: 2,
                     boxShadow: 2,
                     bgcolor: "#1282c570",
@@ -90,8 +87,6 @@ const Table = () => {
                 <td>
                   <Card
                     sx={{
-                      // maxWidth: 350,
-                      // minWidth: 280,
                       padding: 2,
                       boxShadow: 2,
                       display: "flex",
