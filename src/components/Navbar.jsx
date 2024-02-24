@@ -10,10 +10,12 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@mui/material';
+import { Button, useMediaQuery } from '@mui/material';
+import LogoutModal from './LogoutModal';
 
 function Navbar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const[open,setOpen]=React.useState(false);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -28,9 +30,11 @@ function Navbar() {
     navigate("/admin/userdetails")
   }
   const handleLogout = () => {
-    alert("Logging out");
-    navigate("/");
-    localStorage.clear();
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
   const isLargeScreen = useMediaQuery('(min-width: 1280px)'); 
   return (
@@ -62,7 +66,7 @@ function Navbar() {
 
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
               {isLargeScreen ? (
-          <span sx={{ display: { xs: 'none', md: 'none', lg: 'inline' }}}><Typography sx={{color:"white"}}>Menu</Typography></span>
+          <span sx={{ display: { xs: 'none', md: 'none', lg: 'inline' }}}><Button variant='contained' sx={{color:"white",background:"#178393"}}>Menu</Button></span>
         ) : (
           <MenuIcon sx={{ mt: 0 }} />
         )}
@@ -102,6 +106,7 @@ function Navbar() {
           </Box>
         </Toolbar>
       </Container>
+      <LogoutModal open={open} handleClose={handleClose} />
     </AppBar>
   );
 }

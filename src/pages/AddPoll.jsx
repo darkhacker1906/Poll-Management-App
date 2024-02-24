@@ -16,7 +16,6 @@ import { dispatch } from "../redux/store/store";
 import { useSelector } from "react-redux";
 import { addPollApi, addPollResetReducer } from "../redux/slice/AddPollSlice";
 import { ToastContainer, toast } from "react-toastify";
-import CloseIcon from "@mui/icons-material/Close";
 import FormError from "../schemas/formError";
 import { addPollSchema } from "../schemas/Validation";
 
@@ -194,8 +193,3 @@ function AddPoll() {
 }
 
 export default AddPoll;
- {/* <IconButton onClick={() => handleRemoveOption(index)}>
-                    {" "}
-                    <CloseIcon />
-                  </IconButton> */}
-                // </Box>
