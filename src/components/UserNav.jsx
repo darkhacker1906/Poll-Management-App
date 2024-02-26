@@ -25,6 +25,9 @@ function UserNav() {
     navigate("/");
     localStorage.clear();
   };
+  const handleUserDetails=()=>{
+     navigate('/')
+  }
   return (
     <AppBar position="static" sx={{background:"#2E9FBB"}}>
       <Container maxWidth="xl" >
@@ -71,6 +74,7 @@ function UserNav() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleUserDetails}>User Details</MenuItem>
             </Menu>
           </Box>
         </Toolbar>

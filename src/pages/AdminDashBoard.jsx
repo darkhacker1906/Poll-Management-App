@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardContent,
-  Grid,
   Pagination,
   Stack,
   Typography,
@@ -25,6 +24,7 @@ import { addPollResetReducer } from "../redux/slice/AddPollSlice";
 import { deleteResetReducer } from "../redux/slice/DeletePollSlice";
 import AddOptionModal from "../components/AddOptionModal";
 import { addOptionResetReducer } from "../redux/slice/AddOptionSlice";
+import LogoutModal from "../components/LogoutModal";
 
 function AdminDashBoard() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -75,6 +75,9 @@ function AdminDashBoard() {
   const handleAddOptionClose = () => {
     setAddOptionOpen(false);
   };
+  const handleLogoutClose=()=>{
+setLogoutOpen(false);
+  }
   useEffect(() => {
     if (addPollData && addPollData.isSuccess) {
       toast.success("Poll added successfully", { autoClose: 1000 });
@@ -139,18 +142,19 @@ function AdminDashBoard() {
         // background:
         //   "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
         // background:"linear-gradient()"
-        background:"#6e8f9575"
+        // background:"#6e8f9575"
+        background:"#f5f5f5"
       }}
     >
       <Navbar />
       <Box
         sx={{
-          marginTop: 2,
+          // marginTop: 2,
           display: "flex",
           flexWrap: "wrap",
           width: "97%",
           margin: "auto",
-          justifyContent: "space-between",
+          justifyContent: {lg:"space-between",md:"space-between",sm:"space-between",justifyContent:"center"},
           padding: 1,
         }}
       >
@@ -159,9 +163,9 @@ function AdminDashBoard() {
             <Card
               key={user._id}
               sx={{
-                width: { lg: "49%", sm: "47%", md: "47%", xs: "95%" },
+                width: { lg: "49%", sm: "49%", md: "49%", xs: "95%" },
                 borderRadius: 5,
-                marginTop: 3,
+                marginTop: {lg:3,md:3,sm:2,xs:1.5},
                 pt: 2,
                 border:"1px solid #aca9a9",
                 height: "280px",
@@ -215,7 +219,6 @@ function AdminDashBoard() {
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        borderBottom:"1px solid #aca9a9",
                         paddingTop:"4px"
                       }}
                     >

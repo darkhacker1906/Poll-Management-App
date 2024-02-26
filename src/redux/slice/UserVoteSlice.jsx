@@ -38,15 +38,14 @@ const userVote = createSlice({
   },
 });
 
-export async function userVoteApi(payload) {
-const {id,option,header}=payload;
-console.log(payload);
+export async function userVoteApi(id,option,header) {
   try {
     dispatch(startLoading());
     let response = await Instance.get(
         `do_vote?id=${id}&option_text=${option}`,
         header
       );
+      console.log(response);
     if(response.data.error === 0){
         dispatch(voteSuccessful(response.data));
     }
