@@ -46,6 +46,7 @@ export function userVoteApi(id, option, header) {
         `do_vote?id=${id}&option_text=${option}`,
         header
       );
+      console.log(response);
       if (response.data.error === 0) {
         dispatch(userVote.actions.voteSuccessful(response.data));
       } else {
