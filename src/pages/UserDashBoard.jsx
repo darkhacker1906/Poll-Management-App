@@ -33,28 +33,21 @@ function UserDashBoard() {
     setCurrentPage(value);
   };
 
+  
   const header = {
     headers: {
       access_token: token,
     },
   };
   const add_vote =async (id, option) => {
-    // const header={
-    //   access_token: token
-    // }
-   
     try{
-      await dispatch(userVoteApi(id, option, header ));
+      await dispatch(userVoteApi(id, option,header ));
       setAddId(id);
       dispatch(userVoteResetReducer());
     }catch(error){
       console.log("error", error);
-    }finally{
-      dispatch(userVoteResetReducer());
-
     }
     setAddId(id);
- 
   };
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -64,7 +57,7 @@ function UserDashBoard() {
     if (UserVoteData!=null && UserVoteData.isSuccess) {
       toast.success("Vote added successfully", { autoClose: 1000 });
     } else if (addId !== null && UserVoteData && UserVoteData.isError !== 0) {
-      // toast.error("Failed to add vote", { autoClose: 1000 });
+      toast.error("Failed to add vote", { autoClose: 1000 });
     }
     setAddId(null);
   }, [UserVoteData.isSuccess, UserVoteData.isError]);
@@ -106,6 +99,7 @@ function UserDashBoard() {
                 marginTop: 3,
                 pt: 2,
                 opacity: 0.8,
+                height: "280px",
                 "&:hover": {
                   boxShadow: "15px 15px 15px grey",
                 },
@@ -120,7 +114,7 @@ function UserDashBoard() {
                       background: "#2E9FBB",
                     }}
                   >
-                    <Typography p={1}>{user.title}</Typography>{" "}
+                    <Typography p={1} sx={{fontSize:"19px",fontWeight:"bold"}}>{user.title}</Typography>{" "}
                     <Box
                       sx={{
                         display: "flex",
@@ -143,7 +137,9 @@ function UserDashBoard() {
                       <Typography p={1}>{e.option}</Typography>
                       <Button
                         variant="contained"
-                        sx={{ background: "#1A778A" }}
+                        sx={{ background: "#1A778A","&:hover": {
+                          background: "#156467",
+                        },}}
                         onClick={() => add_vote(user._id, e.option)}
                       >
                         Vote

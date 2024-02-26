@@ -6,12 +6,12 @@ const initialState = {
   loading: false,
   isError: false,
   isSuccess: false,
-  data: [],
+  data: {},
 };
 
 const userVote = createSlice({
   name: "userVote",
-  initialState: initialState,
+  initialState,
   reducers: {
     startLoading: (state) => {
       state.loading = true;
@@ -38,27 +38,27 @@ const userVote = createSlice({
   },
 });
 
-export async function userVoteApi(id,option,header) {
-  try {
-    dispatch(startLoading());
-    let response = await Instance.get(
+export function userVoteApi(id, option, header) {
+  return async () => {
+    try {
+      dispatch(userVote.actions.startLoading());
+      let response = await Instance.get(
         `do_vote?id=${id}&option_text=${option}`,
         header
       );
-      console.log(response);
-    if(response.data.error === 0){
-        dispatch(voteSuccessful(response.data));
+      if (response.data.error === 0) {
+        dispatch(userVote.actions.voteSuccessful(response.data));
+      } else {
+        dispatch(userVote.actions.hasError(response.data));
+      }
+    } catch (e) {
+      dispatch(hasError(e));
+      console.log(e, "sdffsf");
     }
-    else{
-        dispatch(hasError(response.data));
-    }
-  } catch (e) {
-    dispatch(hasError(e));
-    console.log(e, "sdffsf");
-  }
+  };
 }
 
-export const { startLoading, voteSuccessful,hasError,userVoteResetReducer } =
+export const { startLoading, voteSuccessful, hasError, userVoteResetReducer } =
   userVote.actions;
 
 export default userVote.reducer;

@@ -70,6 +70,7 @@ export default function SignIn() {
     if (signinSlice.isSuccess && signinSlice.data.token) {
       const decode = jwtDecode(signinSlice.data.token);
       localStorage.setItem("token", signinSlice.data.token);
+      localStorage.setItem("id",decode._id);
       localStorage.setItem("role", decode.role);
       dispatch(loginResetReducer());
     } else if (signinSlice.isError) {

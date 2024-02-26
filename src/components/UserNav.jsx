@@ -10,9 +10,15 @@ import Container from '@mui/material/Container';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from 'react-router-dom';
+import { Button, useMediaQuery } from '@mui/material';
+import LogoutModal from './LogoutModal';
 
 function UserNav() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [open,setOpen]=React.useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -21,13 +27,12 @@ function UserNav() {
     setAnchorElUser(null);
   };
   const handleLogout = () => {
-    alert("Logging out");
-    navigate("/");
-    localStorage.clear();
+    setOpen(true);
   };
   const handleUserDetails=()=>{
-     navigate('/')
+     navigate('/user/detail')
   }
+  const isLargeScreen=useMediaQuery("(min-width: 1280px)");
   return (
     <AppBar position="static" sx={{background:"#2E9FBB"}}>
       <Container maxWidth="xl" >
@@ -52,13 +57,44 @@ function UserNav() {
             User Dashboard
           </Typography>
           <Box sx={{ flexGrow: 0 ,width:{lg:"38%",sm:"38%",xs:"30%"},display:"flex",justifyContent:"flex-end",pr:{lg:1,md:1,sm:1,xs:2}}}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <MenuIcon sx={{mt:0}}/>
-              </IconButton>
-            </Tooltip>
+           {
+            isLargeScreen?
+            (<span
+            sx={{ display: { xs: "none", md: "none", lg: "inline" } }}
+          >
+            <Button
+            onClick={handleOpenUserMenu}
+              variant="contained"
+              sx={{
+                color: "white",
+                background: "#178393",
+                "&:hover": {
+                  background: "#156467",
+                },
+              }}
+            >
+              Menu
+            </Button>
+          </span>
+        ): <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <MenuIcon sx={{mt:0}}/>
+            </IconButton>
+          </Tooltip>
+           }
+           
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: '45px', 
+              // '& .MuiMenu-list': {
+              //   backgroundColor: "#42afb469",
+              // }
+              "& .MuiMenuItem-root": {
+                "&:hover": {
+                  background: "#1E647A",
+                  color: "white",
+                },
+              }
+            }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -79,6 +115,7 @@ function UserNav() {
           </Box>
         </Toolbar>
       </Container>
+      <LogoutModal open={open} handleClose={handleClose} />
     </AppBar>
   );
 }
