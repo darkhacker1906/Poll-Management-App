@@ -21,11 +21,13 @@ import UserNav from "../components/UserNav";
 function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
-  console.log(adminPollData);
   const UserVoteData = useSelector((state) => state.userVote);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
-  const [disabledIds, setDisabledIds] = useState({});
+  const [disabledIds, setDisabledIds] = useState(() => {
+    const savedDisabledIds = JSON.parse(localStorage.getItem("disabledIds"));
+    return savedDisabledIds || {};
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -43,9 +45,12 @@ function UserDashBoard() {
     try{
       setDisabledIds((prev)=>({
         ...prev,
-        [id] : index,
+        [id]: true,
       }))
-      localStorage.setItem("disabledIds", JSON.stringify({ ...disabledIds, [id]: index }));
+      localStorage.setItem(
+        "disabledIds",
+        JSON.stringify({ ...disabledIds, [id]: true })
+      );
       await dispatch(userVoteApi(id, option,header ));
       setAddId(id);
       dispatch(userVoteResetReducer());
@@ -129,7 +134,6 @@ function UserDashBoard() {
                       }}
                     ></Box>
                   </Box>
-
                   {user.options.map((e, index) => (
                     <Box
                       key={index}
@@ -145,11 +149,11 @@ function UserDashBoard() {
                         sx={{ background: "#1A778A","&:hover": {
                           background: "#156467",
                         },}}
-                        disabled={disabledIds[user._id]===index }
+                        disabled={disabledIds[user._id]}
                         onClick={() => add_vote(user.title, user._id, e.option, index)}
                       >
                      {
-                     disabledIds[user._id]===index && e.vote? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
+                     disabledIds[user._id]===true && e.vote? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
                      <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
                      </svg>:'vote'
                      }
