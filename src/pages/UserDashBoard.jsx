@@ -114,7 +114,8 @@ function UserDashBoard() {
                 marginTop: 3,
                 pt: 2,
                 opacity: 0.8,
-                height: "280px",
+                height:"auto",
+                minHeight: "300px",
                 "&:hover": {
                   boxShadow: "15px 15px 15px grey",
                 },

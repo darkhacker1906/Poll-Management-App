@@ -187,7 +187,8 @@ setLogoutOpen(false);
                 marginTop: {lg:3,md:3,sm:2,xs:1.5},
                 pt: 2,
                 border:"1px solid #aca9a9",
-                height: "280px",
+                height:"auto",
+                minHeight: "300px",
                 "&:hover": {
                   boxShadow: "5px 5px 5px grey",
                 },
