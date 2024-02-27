@@ -11,6 +11,8 @@ import EditTitle from '../pages/EditTitle'
 import AddOption from '../pages/AddOption'
 import UserDetailsSlice from '../redux/slice/UserDetailsSlice'
 import Userdetail from '../pages/Userdetail'
+import ViewAPollSlice from '../redux/slice/ViewAPollSlice'
+import ViewPoll from '../pages/ViewPoll'
 // import ViewPoll from '../pages/ViewPoll'
 
 function Router() {
@@ -26,6 +28,7 @@ function Router() {
         <Route path='/edit/:id' element={<EditTitle/>}/>
         <Route path='/admin/addoption' element={<AddOption/>}/>
         <Route path='/user/detail' element={<Userdetail/>}></Route>
+        <Route path='/user/viewpoll' element={<ViewPoll/>}></Route>
       </Routes>
     </div>
   )

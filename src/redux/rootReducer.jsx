@@ -9,6 +9,7 @@ import UserVoteSlice from "./slice/UserVoteSlice";
 import TitleEditSlice from "./slice/TitleEditSlice";
 import AddOptionSlice from "./slice/AddOptionSlice";
 import DeleteOptionSlice from "./slice/DeleteOptionSlice";
+import ViewAPollSlice from "./slice/ViewAPollSlice";
 
 const rootReducer=combineReducers({
     signup:SignUpSlice,
@@ -21,6 +22,6 @@ const rootReducer=combineReducers({
     editPoll:TitleEditSlice,
     addOption:AddOptionSlice,
     deletePollOptions:DeleteOptionSlice,
-    
+    viewPoll:ViewAPollSlice,
 })
 export default rootReducer

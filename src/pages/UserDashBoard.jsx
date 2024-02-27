@@ -17,6 +17,7 @@ import { dispatch } from "../redux/store/store";
 import { ToastContainer, toast } from "react-toastify";
 import { userVoteApi, userVoteResetReducer } from "../redux/slice/UserVoteSlice";
 import UserNav from "../components/UserNav";
+import { viewPollApi } from "../redux/slice/ViewAPollSlice";
 
 function UserDashBoard() {
   const navigate = useNavigate();
@@ -76,6 +77,10 @@ function UserDashBoard() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = reversedPollList.slice(startIndex, endIndex);
+  const handleViewPoll=async(id)=>{
+    await dispatch(viewPollApi(id));
+    navigate("/user/viewpoll");
+  }
 
   return (
     <Box
@@ -113,6 +118,9 @@ function UserDashBoard() {
                 "&:hover": {
                   boxShadow: "15px 15px 15px grey",
                 },
+                display:"flex",
+                flexDirection:"column",
+                justifyContent:"space-between"
               }}
             >
               {user && (
@@ -162,6 +170,7 @@ function UserDashBoard() {
                   ))}
                 </CardContent>
               )}
+              <Button variant="contained" sx={{background:"#2E9FBB",":hover":{background:"#156467"}}} onClick={()=>handleViewPoll(user._id)}>View a poll</Button>
             </Card>
           ))
         ) : (
