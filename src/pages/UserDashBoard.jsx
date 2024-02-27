@@ -21,10 +21,11 @@ import UserNav from "../components/UserNav";
 function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
+  console.log(adminPollData);
   const UserVoteData = useSelector((state) => state.userVote);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
-  const [option,setOption]=useState([]);
+  const [disabledIds, setDisabledIds] = useState({});
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -38,23 +39,20 @@ function UserDashBoard() {
       access_token: token,
     },
   };
-  const add_vote =async (id, option) => {
-    // const header={
-    //   access_token: token
-    // }
-   
+  const add_vote =async (title ,id, option, index) => {
     try{
-      await dispatch(userVoteApi(id, option, header ));
+      setDisabledIds((prev)=>({
+        ...prev,
+        [id] : index,
+      }))
+      localStorage.setItem("disabledIds", JSON.stringify({ ...disabledIds, [id]: index }));
+      await dispatch(userVoteApi(id, option,header ));
       setAddId(id);
       dispatch(userVoteResetReducer());
     }catch(error){
       console.log("error", error);
-    }finally{
-      dispatch(userVoteResetReducer());
-
     }
     setAddId(id);
- 
   };
   useEffect(() => {
     dispatch(AdminPollApi());
@@ -63,10 +61,10 @@ function UserDashBoard() {
   useEffect(() => {
     if (UserVoteData!=null && UserVoteData.isSuccess) {
       toast.success("Vote added successfully", { autoClose: 1000 });
-    } else if (addId !== null && UserVoteData && UserVoteData.isError !== 0) {
-      // toast.error("Failed to add vote", { autoClose: 1000 });
+    } 
+    if(UserVoteData.isError){
+      toast.error("Vote not added successfully", { autoClose: 1000 });
     }
-    setAddId(null);
   }, [UserVoteData.isSuccess, UserVoteData.isError]);
 
   const reversedPollList = [...adminPollData].reverse();
@@ -106,6 +104,7 @@ function UserDashBoard() {
                 marginTop: 3,
                 pt: 2,
                 opacity: 0.8,
+                height: "280px",
                 "&:hover": {
                   boxShadow: "15px 15px 15px grey",
                 },
@@ -120,7 +119,7 @@ function UserDashBoard() {
                       background: "#2E9FBB",
                     }}
                   >
-                    <Typography p={1}>{user.title}</Typography>{" "}
+                    <Typography p={1} sx={{fontSize:"19px",fontWeight:"bold"}}>{user.title}</Typography>{" "}
                     <Box
                       sx={{
                         display: "flex",
@@ -143,10 +142,17 @@ function UserDashBoard() {
                       <Typography p={1}>{e.option}</Typography>
                       <Button
                         variant="contained"
-                        sx={{ background: "#1A778A" }}
-                        onClick={() => add_vote(user._id, e.option)}
+                        sx={{ background: "#1A778A","&:hover": {
+                          background: "#156467",
+                        },}}
+                        disabled={disabledIds[user._id]===index }
+                        onClick={() => add_vote(user.title, user._id, e.option, index)}
                       >
-                        Vote
+                     {
+                     disabledIds[user._id]===index && e.vote? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
+                     <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
+                     </svg>:'vote'
+                     }
                       </Button>
                     </Box>
                   ))}

@@ -1,9 +1,7 @@
-import {configureStore,applyMiddleware} from '@reduxjs/toolkit'
-import  { thunk } from "redux-thunk"
+import {configureStore} from '@reduxjs/toolkit'
 import rootReducer from '../rootReducer'
 const store=configureStore({
     reducer:rootReducer,
-    applyMiddleware: [thunk],
 },)
 export  default store
 export const {dispatch}=store ;

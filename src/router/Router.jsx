@@ -9,7 +9,9 @@ import PrivateRoute from './PrivateRoute'
 import UserDetails from '../pages/UserDetails'
 import EditTitle from '../pages/EditTitle'
 import AddOption from '../pages/AddOption'
-import ViewPoll from '../pages/ViewPoll'
+import UserDetailsSlice from '../redux/slice/UserDetailsSlice'
+import Userdetail from '../pages/Userdetail'
+// import ViewPoll from '../pages/ViewPoll'
 
 function Router() {
   return (
@@ -17,15 +19,13 @@ function Router() {
       <Routes>
         <Route path='/' element={<SignIn/>}/>
         <Route path='/signup' element={<SignUp/>}/>
-        {/* <Route path='/admin' element={<AdminDashBoard/>}/> */}
-        {/* <Route path='/user' element={<UserDashBoard/>}/> */}
         <Route  path='/admin' element={<PrivateRoute Component={AdminDashBoard}/>}/>
         <Route path='/user' element={<PrivateRoute Component={UserDashBoard}/>}/>
         <Route path='/admin/addpoll' element={<AddPoll/>}/>
         <Route path='admin/userdetails' element={<UserDetails/>}/>
         <Route path='/edit/:id' element={<EditTitle/>}/>
         <Route path='/admin/addoption' element={<AddOption/>}/>
-        <Route path='/user/viewpoll' element={<ViewPoll/>}/>
+        <Route path='/user/detail' element={<Userdetail/>}></Route>
       </Routes>
     </div>
   )
