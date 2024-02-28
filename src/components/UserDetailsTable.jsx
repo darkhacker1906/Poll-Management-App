@@ -8,11 +8,15 @@ import {
   Pagination,
   CircularProgress,
   Typography,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 
 const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage] = useState(10);
   const [displayedPages] = useState(3);
 
   const userDetails = useSelector((state) => state.userDetails.data);
@@ -120,7 +124,6 @@ const Table = () => {
                 <td>
                   <Card
                     sx={{
-                      // width: 350,
                       padding: 2,
                       boxShadow: 2,
                       display: "flex",
@@ -148,6 +151,25 @@ const Table = () => {
             onChange={paginate}
             color="primary"
           />
+           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <InputLabel id="demo-select-small-label">Select</InputLabel>
+      <Select
+        labelId="demo-select-small-label"
+        id="demo-select-small"
+        // value={age}
+        label="Select"
+        // onChange={handleChange}
+        sx={{marginTop:"0px"}}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        <MenuItem value={5}>5</MenuItem>
+        <MenuItem value={10}>10</MenuItem>
+        <MenuItem value={20}>20</MenuItem>
+        <MenuItem value={25}>25</MenuItem>
+      </Select>
+    </FormControl>
         </Box>
       </Stack>
     </>

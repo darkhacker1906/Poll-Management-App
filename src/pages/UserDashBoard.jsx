@@ -17,15 +17,18 @@ import { dispatch } from "../redux/store/store";
 import { ToastContainer, toast } from "react-toastify";
 import { userVoteApi, userVoteResetReducer } from "../redux/slice/UserVoteSlice";
 import UserNav from "../components/UserNav";
+import { viewPollApi } from "../redux/slice/ViewAPollSlice";
 
 function UserDashBoard() {
   const navigate = useNavigate();
   const adminPollData = useSelector((state) => state.adminPoll.data);
-  console.log(adminPollData);
   const UserVoteData = useSelector((state) => state.userVote);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
-  const [disabledIds, setDisabledIds] = useState({});
+  const [disabledIds, setDisabledIds] = useState(() => {
+    const savedDisabledIds = JSON.parse(localStorage.getItem("disabledIds"));
+    return savedDisabledIds || {};
+  });
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
@@ -43,9 +46,12 @@ function UserDashBoard() {
     try{
       setDisabledIds((prev)=>({
         ...prev,
-        [id] : index,
+        [id]: true,
       }))
-      localStorage.setItem("disabledIds", JSON.stringify({ ...disabledIds, [id]: index }));
+      localStorage.setItem(
+        "disabledIds",
+        JSON.stringify({ ...disabledIds, [id]: true })
+      );
       await dispatch(userVoteApi(id, option,header ));
       setAddId(id);
       dispatch(userVoteResetReducer());
@@ -71,6 +77,10 @@ function UserDashBoard() {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = reversedPollList.slice(startIndex, endIndex);
+  const handleViewPoll=async(id)=>{
+    await dispatch(viewPollApi(id));
+    navigate("/user/viewpoll");
+  }
 
   return (
     <Box
@@ -104,10 +114,14 @@ function UserDashBoard() {
                 marginTop: 3,
                 pt: 2,
                 opacity: 0.8,
-                height: "280px",
+                height:"auto",
+                minHeight: "300px",
                 "&:hover": {
                   boxShadow: "15px 15px 15px grey",
                 },
+                display:"flex",
+                flexDirection:"column",
+                justifyContent:"space-between"
               }}
             >
               {user && (
@@ -129,7 +143,6 @@ function UserDashBoard() {
                       }}
                     ></Box>
                   </Box>
-
                   {user.options.map((e, index) => (
                     <Box
                       key={index}
@@ -145,11 +158,11 @@ function UserDashBoard() {
                         sx={{ background: "#1A778A","&:hover": {
                           background: "#156467",
                         },}}
-                        disabled={disabledIds[user._id]===index }
+                        disabled={disabledIds[user._id]}
                         onClick={() => add_vote(user.title, user._id, e.option, index)}
                       >
                      {
-                     disabledIds[user._id]===index && e.vote? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
+                     disabledIds[user._id]===true && e.vote? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
                      <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
                      </svg>:'vote'
                      }
@@ -158,6 +171,7 @@ function UserDashBoard() {
                   ))}
                 </CardContent>
               )}
+              <Button variant="contained" sx={{background:"#2E9FBB",":hover":{background:"#156467"}}} onClick={()=>handleViewPoll(user._id)}>View a poll</Button>
             </Card>
           ))
         ) : (

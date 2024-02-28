@@ -36,7 +36,7 @@ export default function Userdetail() {
              filteredUserDetails.map((e) => (
               <CardContent>
                 <Typography variant='h5' fontWeight={"bold"} mb={3} textAlign={"center"} gutterBottom>
-                  User details
+                  User detail
                 </Typography>
                 <Box sx={{ display: "flex", justifyContent: "space-between",mb:1 }}><Typography fontWeight={"bold"} fontSize={20}>UserId</Typography> <Typography> {e._id}</Typography></Box>
                 <Box sx={{ display: "flex", justifyContent: "space-between",mb:1 }}><Typography fontWeight={"bold"} fontSize={20}>Username</Typography> <Typography> {e.username}</Typography></Box>

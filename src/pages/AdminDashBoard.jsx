@@ -25,6 +25,8 @@ import { deleteResetReducer } from "../redux/slice/DeletePollSlice";
 import AddOptionModal from "../components/AddOptionModal";
 import { addOptionResetReducer } from "../redux/slice/AddOptionSlice";
 import LogoutModal from "../components/LogoutModal";
+import DeleteOptionsModal from "../components/DeleteOptionsModal";
+import { deleteOptionResetReducer } from "../redux/slice/DeleteOptionSlice";
 
 function AdminDashBoard() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,9 +45,12 @@ function AdminDashBoard() {
   const [editId, setEditId] = useState(null);
   const [title, setTitle] = useState("");
   const [addOptionId, setAddOptionId] = useState(null);
+  const [deleteOpen,setDeleteOpen]=useState(false);
+  const [deleteText,setDeleteText]=useState(null);
   const editdata = useSelector((state) => state.editPoll);
   const addPollData = useSelector((state) => state.addPoll);
   const addOptionData = useSelector((state) => state.addOption);
+  const deleteOption=useSelector((state)=>state.deletePollOptions);
 
   const handleDelete = async (id) => {
     const selectedPoll = adminPollData.find((poll) => poll._id === id);
@@ -78,6 +83,14 @@ function AdminDashBoard() {
   const handleLogoutClose=()=>{
 setLogoutOpen(false);
   }
+  const handleDeleteOptions=(id,option)=>{
+    setDeleteId(id),
+    setDeleteText(option);
+    setDeleteOpen(true);
+  }
+  const handleDeleteClose=()=>{
+    setDeleteOpen(false);
+  }
   useEffect(() => {
     if (addPollData && addPollData.isSuccess) {
       toast.success("Poll added successfully", { autoClose: 1000 });
@@ -105,6 +118,14 @@ setLogoutOpen(false);
       toast.error("Option not added successfully", { autoClose: 1000 });
       dispatch(addOptionResetReducer());
     }
+    else if(deleteOption && deleteOption.isSuccess){
+      toast.success("Option deleted successfully ",{autoClose:1000})
+      dispatch(deleteOptionResetReducer());
+    }
+    else if(deleteOption && deleteOption.isError){
+      toast.error("Option not deleted ",{autoClose:1000});
+      dispatch(deleteOptionResetReducer());
+    }
   }, [
     deleteData.isSuccess,
     deleteData.isError,
@@ -114,6 +135,8 @@ setLogoutOpen(false);
     addPollData.isSuccess,
     addOptionData.isSuccess,
     addOptionData.isError,
+    deleteOption.isSuccess,
+    deleteOption.isError,
   ]);
 
   useEffect(() => {
@@ -125,6 +148,7 @@ setLogoutOpen(false);
     editdata.isSuccess,
     addOptionId,
     addOptionData.isSuccess,
+    deleteOption.isSuccess,
   ]);
 
   const reversedPollList = [...adminPollData].reverse();
@@ -139,17 +163,12 @@ setLogoutOpen(false);
         height: "100vh",
         overflow: "auto",
         margin: "auto",
-        // background:
-        //   "linear-gradient(80deg, rgb(3, 195, 195) 0.3%, rgb(37, 84, 112) 87.8%)",
-        // background:"linear-gradient()"
-        // background:"#6e8f9575"
         background:"#f5f5f5"
       }}
     >
       <Navbar />
       <Box
         sx={{
-          // marginTop: 2,
           display: "flex",
           flexWrap: "wrap",
           width: "97%",
@@ -168,7 +187,8 @@ setLogoutOpen(false);
                 marginTop: {lg:3,md:3,sm:2,xs:1.5},
                 pt: 2,
                 border:"1px solid #aca9a9",
-                height: "280px",
+                height:"auto",
+                minHeight: "300px",
                 "&:hover": {
                   boxShadow: "5px 5px 5px grey",
                 },
@@ -223,7 +243,9 @@ setLogoutOpen(false);
                       }}
                     >
                       <Typography p={1}>{e.option}</Typography>
-                      <Typography>Vote {e.vote}</Typography>
+                     <Box sx={{display:"flex"}}><Typography>Vote {e.vote}</Typography>
+                     <Box sx={{":hover":{cursor:"pointer"}}}><MdDelete color="red" fontSize={22}  onClick={()=>handleDeleteOptions(user._id,e.option)}/></Box>
+                     </Box>    
                     </Box>
                   ))}
                   </Box>
@@ -324,6 +346,7 @@ setLogoutOpen(false);
         addOptionOpen={addOptionOpen}
         addOptionId={addOptionId}
       />
+      <DeleteOptionsModal deleteOpen={deleteOpen} deleteId={deleteId} handleDeleteClose={handleDeleteClose} deleteText={deleteText}/>
     </Box>
   );
 }

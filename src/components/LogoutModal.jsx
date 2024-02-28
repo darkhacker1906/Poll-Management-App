@@ -23,7 +23,9 @@ const LogoutModal = ({ open, handleClose }) => {
     const navigate=useNavigate();
     const handleCloseModal=()=>{
  navigate("/");
- localStorage.clear();
+//  localStorage.clear();
+  localStorage.removeItem("token"); 
+  localStorage.removeItem("role");
         handleClose();
     } 
   return (
