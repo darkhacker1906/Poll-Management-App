@@ -21,15 +21,21 @@ import { viewPollApi } from "../redux/slice/ViewAPollSlice";
 
 function UserDashBoard() {
   const navigate = useNavigate();
+//   const pollData = useSelector((state) =>
+//   state.adminPoll.data.filter((e) => e.id === id)
+// );
   const adminPollData = useSelector((state) => state.adminPoll.data);
+
+  
   const UserVoteData = useSelector((state) => state.userVote);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
-  const [disabledIds, setDisabledIds] = useState(() => {
-    const savedDisabledIds = JSON.parse(localStorage.getItem("disabledIds"));
-    return savedDisabledIds || {};
-  });
-
+  const [ids, setIds] = useState() 
+  // => {
+  //   const savedDisabledIds = JSON.parse(localStorage.getItem("disabledIds"));
+  //   return savedDisabledIds || {};
+  // });
+  const [userVotes, setUserVotes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
 
@@ -42,16 +48,18 @@ function UserDashBoard() {
       access_token: token,
     },
   };
+ 
   const add_vote =async (title ,id, option, index) => {
+    setIds(id);
     try{
-      setDisabledIds((prev)=>({
-        ...prev,
-        [id]: true,
-      }))
-      localStorage.setItem(
-        "disabledIds",
-        JSON.stringify({ ...disabledIds, [id]: true })
-      );
+      // setDisabledIds((prev)=>({
+      //   ...prev,
+      //   [id]: true,
+      // }))
+      // localStorage.setItem(
+      //   "disabledIds",
+      //   JSON.stringify({ ...disabledIds, [id]: true })
+      // );
       await dispatch(userVoteApi(id, option,header ));
       setAddId(id);
       dispatch(userVoteResetReducer());
@@ -80,6 +88,14 @@ function UserDashBoard() {
   const handleViewPoll=async(id)=>{
     await dispatch(viewPollApi(id));
     navigate("/user/viewpoll");
+  }
+  const userHasVoted = (id) => {
+    // return adminPollData.includes(id);
+    // const tttt=adminPollData.map((e)=>e.options.map((data)=>console.log(data)))
+    // return adminPollData.map((e)=>e._id===ids );
+    const poll = adminPollData.find((poll) => poll._id === id);
+    const hasZeroVote = poll && poll.options.some((option) => option.vote === 1);
+    return hasZeroVote;
   }
 
   return (
@@ -153,7 +169,18 @@ function UserDashBoard() {
                       }}
                     >
                       <Typography p={1}>{e.option}</Typography>
-                      <Button
+                      {
+                        e.vote===1 ? <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="40" height="30" viewBox="0 0 48 48">
+                        <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
+                        </svg>: <Button
+                        variant="contained"
+                        onClick={() => add_vote(user.title, user._id, e.option, index)}
+                        disabled={userHasVoted(user._id)}
+                        sx={{ background: "#1A778A","&:hover": {
+                          background: "#156467",
+                        },}}>Vote</Button>
+                      }
+                      {/* <Button
                         variant="contained"
                         sx={{ background: "#1A778A","&:hover": {
                           background: "#156467",
@@ -166,7 +193,7 @@ function UserDashBoard() {
                      <path fill="#c8e6c9" d="M44,24c0,11.045-8.955,20-20,20S4,35.045,4,24S12.955,4,24,4S44,12.955,44,24z"></path><path fill="#4caf50" d="M34.586,14.586l-13.57,13.586l-5.602-5.586l-2.828,2.828l8.434,8.414l16.395-16.414L34.586,14.586z"></path>
                      </svg>:'vote'
                      }
-                      </Button>
+                      </Button> */}
                     </Box>
                   ))}
                 </CardContent>
