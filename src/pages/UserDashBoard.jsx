@@ -28,6 +28,7 @@ function UserDashBoard() {
 
   
   const UserVoteData = useSelector((state) => state.userVote);
+  console.log(UserVoteData);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
   const [ids, setIds] = useState() 
@@ -69,8 +70,9 @@ function UserDashBoard() {
     setAddId(id);
   };
   useEffect(() => {
-    dispatch(AdminPollApi());
-  }, [UserVoteData]);
+    console.log('lolo');
+          dispatch(AdminPollApi());
+  }, [UserVoteData.isSuccess]);
 
   useEffect(() => {
     if (UserVoteData!=null && UserVoteData.isSuccess) {
@@ -90,9 +92,6 @@ function UserDashBoard() {
     navigate("/user/viewpoll");
   }
   const userHasVoted = (id) => {
-    // return adminPollData.includes(id);
-    // const tttt=adminPollData.map((e)=>e.options.map((data)=>console.log(data)))
-    // return adminPollData.map((e)=>e._id===ids );
     const poll = adminPollData.find((poll) => poll._id === id);
     const hasZeroVote = poll && poll.options.some((option) => option.vote === 1);
     return hasZeroVote;

@@ -125,8 +125,8 @@ export default function SignIn() {
             md={5}
             component={Paper}
             elevation={6}
-            width={{ lg: "40%", sm: "50%", md: "70%", xs: "100%" }}
-            height={{ sm: "auto", md: "auto", xs: "100%" }}
+            width={{ lg: "40%", sm: "50%", md: "70%", xs: "90%" }}
+            height={{ sm: "auto", md: "auto" }}
             square
             borderRadius={{ lg: 5, xs: 0 }}
           >
