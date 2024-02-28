@@ -243,7 +243,7 @@ setLogoutOpen(false);
                       }}
                     >
                       <Typography p={1}>{e.option}</Typography>
-                     <Box sx={{display:"flex"}}><Typography>Vote {e.vote}</Typography>
+                     <Box sx={{display:"flex",width:"77px"}}><Typography>Vote {e.vote}</Typography>
                      <Box sx={{":hover":{cursor:"pointer"}}}><MdDelete color="red" fontSize={22}  onClick={()=>handleDeleteOptions(user._id,e.option)}/></Box>
                      </Box>    
                     </Box>
@@ -325,6 +325,9 @@ setLogoutOpen(false);
              position:"fixed",
              left: "50%",
              transform: "translateX(-50%)",
+            //  '& .css-1to7aaw-MuiButtonBase-root-MuiPaginationItem': {
+            //   background:"red",
+            // },
            },
          }}
          count={Math.ceil(adminPollData.length / itemsPerPage)}

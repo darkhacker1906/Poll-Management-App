@@ -8,6 +8,8 @@ import { CircularProgress, Stack, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import { AddOptionApi, addOptionResetReducer } from "../redux/slice/AddOptionSlice";
 import { useSelector } from "react-redux";
+import { AddOptionSchema } from "../schemas/Validation";
+import FormError from "../schemas/formError";
 
 const style = {
   position: "absolute",
@@ -30,8 +32,9 @@ export default function AddOptionModal({
   const initialValues = {
     option: "",
   };
-  const { values, handleChange, handleSubmit, resetForm } = useFormik({
+  const { values, handleChange, handleSubmit, resetForm,errors,handleBlur,touched} = useFormik({
     initialValues: initialValues,
+    validationSchema:AddOptionSchema,
     onSubmit: (values) => {
       const id = addOptionId;
       const option = values.option.trim();
@@ -65,10 +68,8 @@ export default function AddOptionModal({
               variant="h4"
               sx={{
                 fontWeight: "bold",
-                fontStyle: "italic",
                 fontSize: "36px",
                 color: "#255470",
-                textDecoration: "underline",
                 textAlign: "center",
               }}
             >
@@ -78,8 +79,13 @@ export default function AddOptionModal({
               label={"Option"}
               name="option"
               value={values.title}
+              onBlur={handleBlur}
               onChange={handleChange}
             />
+             {errors.option && touched.option && (
+                  <FormError error_msg={errors.option} />
+                )}
+
             {isLoading ? (
               <Box display={"flex"} sx={{justifyContent:"center"}}><CircularProgress color="primary" /></Box>
             ) : (

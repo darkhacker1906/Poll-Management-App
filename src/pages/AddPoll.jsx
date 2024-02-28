@@ -76,7 +76,7 @@ function AddPoll() {
     <Box sx={{ background: "linear-gradient(80deg, #764BA2 ,#667EEA)" }} p={2}>
       <Stack minHeight={"100vh"} sx={{ overflowY: "auto" }}>
         <Card
-          sx={{ minWidth: 300, width: "35%", margin: "auto", borderRadius: 5 }}
+          sx={{ minWidth: 290, width: "35%", margin: "auto", borderRadius: 5 }}
         >
           <CardContent>
             <Stack
@@ -98,7 +98,6 @@ function AddPoll() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   fullWidth
-                  // sx={{ width: "410px" }}
                 />
                  {errors.title && touched.title && (
                   <FormError error_msg={errors.title} />
@@ -113,7 +112,6 @@ function AddPoll() {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   fullWidth
-                  // sx={{ width: "410px" }}
                 />
                  {errors.option1 && touched.option1 && (
                   <FormError error_msg={errors.option1} />
@@ -129,7 +127,6 @@ function AddPoll() {
                   value={values.option2}
                   onChange={handleChange}
                   fullWidth
-                  // sx={{ width: "410px" }}
                 />
                    {errors.option2 && touched.option2 && (
                   <FormError error_msg={errors.option2} />
@@ -137,7 +134,6 @@ function AddPoll() {
               </Box>
 
               {rowData.map((data, index) => (
-                // <Box sx={{ display: "flex"}}>
                   <TextField
                     key={index}
                     onChange={handleChange}

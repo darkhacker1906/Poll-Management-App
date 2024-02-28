@@ -14,3 +14,6 @@ export const addPollSchema=Yup.object({
     option1:Yup.string().required("Please enter your option"),
     option2:Yup.string().required("Please enter your option"),
 })
+export const AddOptionSchema=Yup.object({
+    option:Yup.string().required("Please enter your option"),
+})

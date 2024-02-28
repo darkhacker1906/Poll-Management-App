@@ -16,8 +16,10 @@ import {
 
 const Table = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  // const [itemsPerPage] = useState(8);
+  const [itemsPerPage,setItemsPerPage]=useState(10);
   const [displayedPages] = useState(3);
+  const [pageItem,setPageItem]=useState(10);
 
   const userDetails = useSelector((state) => state.userDetails.data);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -30,6 +32,10 @@ const Table = () => {
   useEffect(() => {
     userApi();
   }, []);
+  const handleChange=(e)=>{
+    const newValue = parseInt(e.target.value); 
+  setItemsPerPage(newValue);
+  }
 
   const paginate = (e, value) => setCurrentPage(value);
   return (
@@ -151,23 +157,24 @@ const Table = () => {
             onChange={paginate}
             color="primary"
           />
-           <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+           <FormControl sx={{mb:1, minWidth: 80 }} size="small">
       <InputLabel id="demo-select-small-label">Select</InputLabel>
       <Select
         labelId="demo-select-small-label"
         id="demo-select-small"
-        // value={age}
+        value={itemsPerPage}
         label="Select"
-        // onChange={handleChange}
+        onChange={handleChange}
         sx={{marginTop:"0px"}}
       >
-        <MenuItem value="">
+        {/* <MenuItem value="">
           <em>None</em>
-        </MenuItem>
-        <MenuItem value={5}>5</MenuItem>
+        </MenuItem> */}
         <MenuItem value={10}>10</MenuItem>
         <MenuItem value={20}>20</MenuItem>
         <MenuItem value={25}>25</MenuItem>
+        <MenuItem value={50}>50</MenuItem>
+        <MenuItem value={100}>100</MenuItem>
       </Select>
     </FormControl>
         </Box>
