@@ -5,6 +5,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { dispatch } from "../redux/store/store";
 import { CircularProgress, Stack, TextField } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 import { useFormik } from "formik";
 import { AddOptionApi, addOptionResetReducer } from "../redux/slice/AddOptionSlice";
 import { useSelector } from "react-redux";
@@ -32,7 +33,7 @@ export default function AddOptionModal({
   const initialValues = {
     option: "",
   };
-  const { values, handleChange, handleSubmit, resetForm,errors,handleBlur,touched} = useFormik({
+  const { values, handleChange, handleSubmit,errors,handleBlur,touched,resetForm} = useFormik({
     initialValues: initialValues,
     validationSchema:AddOptionSchema,
     onSubmit: (values) => {
@@ -46,10 +47,12 @@ export default function AddOptionModal({
         }, 200);
       } else {
         toast.error("Please enter option value", { autoClose: 1000 });
+        resetForm();
+        console.log("Reset value");
         dispatch(addOptionResetReducer());
       }
       dispatch(addOptionResetReducer());
-      resetForm();
+      // resetForm();
     },
   });
 
@@ -78,7 +81,7 @@ export default function AddOptionModal({
             <TextField
               label={"Option"}
               name="option"
-              value={values.title}
+              value={values.option}
               onBlur={handleBlur}
               onChange={handleChange}
             />

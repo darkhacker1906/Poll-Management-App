@@ -24,11 +24,8 @@ function UserDashBoard() {
 //   const pollData = useSelector((state) =>
 //   state.adminPoll.data.filter((e) => e.id === id)
 // );
-  const adminPollData = useSelector((state) => state.adminPoll.data);
-
-  
+  const adminPollData = useSelector((state) => state.adminPoll.data);  
   const UserVoteData = useSelector((state) => state.userVote);
-  console.log(UserVoteData);
   const token = localStorage.getItem("token");
   const [addId, setAddId] = useState(null);
   const [ids, setIds] = useState() 
@@ -70,7 +67,6 @@ function UserDashBoard() {
     setAddId(id);
   };
   useEffect(() => {
-    console.log('lolo');
           dispatch(AdminPollApi());
   }, [UserVoteData.isSuccess]);
 

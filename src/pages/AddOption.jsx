@@ -21,7 +21,6 @@ const AddOption = () => {
   const location = useLocation();
   const addOptiondata = useSelector((state) => state.addOption);
   const isLoading = addOptiondata.loading;
-  console.log(addOptiondata);
   useEffect(() => {
     if (addOptiondata && addOptiondata.isSuccess) {
       toast.success("Option added successfully", { autoClose: 1000 });
@@ -37,6 +36,7 @@ const AddOption = () => {
   const { values, handleChange, handleSubmit, resetForm } = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => {
+      console.log(values);
       const id = values.id;
       const option = values.option.trim();
       if (option) {
