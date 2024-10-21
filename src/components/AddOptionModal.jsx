@@ -5,9 +5,12 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { dispatch } from "../redux/store/store";
 import { CircularProgress, Stack, TextField } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 import { useFormik } from "formik";
 import { AddOptionApi, addOptionResetReducer } from "../redux/slice/AddOptionSlice";
 import { useSelector } from "react-redux";
+import { AddOptionSchema } from "../schemas/Validation";
+import FormError from "../schemas/formError";
 
 const style = {
   position: "absolute",
@@ -30,8 +33,9 @@ export default function AddOptionModal({
   const initialValues = {
     option: "",
   };
-  const { values, handleChange, handleSubmit, resetForm } = useFormik({
+  const { values, handleChange, handleSubmit,errors,handleBlur,touched,resetForm} = useFormik({
     initialValues: initialValues,
+    validationSchema:AddOptionSchema,
     onSubmit: (values) => {
       const id = addOptionId;
       const option = values.option.trim();
@@ -43,10 +47,12 @@ export default function AddOptionModal({
         }, 200);
       } else {
         toast.error("Please enter option value", { autoClose: 1000 });
+        resetForm();
+        console.log("Reset value");
         dispatch(addOptionResetReducer());
       }
       dispatch(addOptionResetReducer());
-      resetForm();
+      // resetForm();
     },
   });
 
@@ -65,10 +71,8 @@ export default function AddOptionModal({
               variant="h4"
               sx={{
                 fontWeight: "bold",
-                fontStyle: "italic",
                 fontSize: "36px",
                 color: "#255470",
-                textDecoration: "underline",
                 textAlign: "center",
               }}
             >
@@ -77,9 +81,14 @@ export default function AddOptionModal({
             <TextField
               label={"Option"}
               name="option"
-              value={values.title}
+              value={values.option}
+              onBlur={handleBlur}
               onChange={handleChange}
             />
+             {errors.option && touched.option && (
+                  <FormError error_msg={errors.option} />
+                )}
+
             {isLoading ? (
               <Box display={"flex"} sx={{justifyContent:"center"}}><CircularProgress color="primary" /></Box>
             ) : (

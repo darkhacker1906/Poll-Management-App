@@ -40,7 +40,6 @@ export const viewPollApi = (payload) => async (dispatch) => {
     let response = await Instance.post(
       `list_poll?id=${payload}`
     );
-    console.log(response);
     if(response.data.error==0){
       dispatch(viewPollSuccessful(response.data));
     }
